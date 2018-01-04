@@ -34,3 +34,9 @@ func (s *service) SayHelloTo(name string) (string, error) {
 
 	return "The warmest of welcomes to you, " + name, nil
 }
+
+func NewService() Service {
+	return &service{
+
+	}
+}

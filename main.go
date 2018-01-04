@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"os"
 	"flag"
 
@@ -10,23 +9,22 @@ import (
 	"os/signal"
 	"syscall"
 	"fmt"
+	"github.com/MICSTI/imsazon/hello"
 )
 
 const (
 	defaultPort = "8605"
-	defaultRoutingServiceURL = "http://localhost;8606"
 )
 
 func main() {
 	var (
 		// read environment variables or use the default values from above
 		addr = envString("PORT", defaultPort)
-		rsurl = envString("ROUTINGSERVICE_URL", defaultRoutingServiceURL)
 
 		httpAddr = flag.String("http.addr", ":"+addr, "HTTP listen address")
-		routingServiceURL = flag.String("service.routing", rsurl, "routing service URL")
 
-		ctx = context.Background()
+		// TODO do we need this?
+		//ctx = context.Background()
 	)
 
 	flag.Parse()
@@ -37,17 +35,20 @@ func main() {
 
 	// TODO init some stuff here?
 
-	// TODO init all service here
+	// all services are declared here
+	var hs hello.Service
+	hs = hello.NewService()
+	hs = hello.NewLoggingService(log.With(logger, "component", "hello"), hs)
 
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
 
-	// init mux router
+	// init router
 	mux := http.NewServeMux()
 
-	// all services are declared here
-	var hs 
+	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
 
+	http.Handle("/", accessControl(mux))
 
 	// error handling
 	errs := make(chan error, 2)

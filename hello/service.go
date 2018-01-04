@@ -1,5 +1,5 @@
 /*
-	The hello services has no other purpose than to greet the user.
+	The hello service has no other purpose than to greet the user.
 	It is just a test service to get a feel for how a microservice should be implemented.
  */
 
@@ -12,7 +12,7 @@ import (
 // ErrInvalidArgument is returned when on or more arguments are invalid
 var ErrInvalidArgument = errors.New("Invalid argument")
 
-// Service is the interface that provides the hello method
+// Service is the interface that provides the hello methods
 type Service interface {
 	// just sends out a standard hello message to everyone
 	SayHello() (string)

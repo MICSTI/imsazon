@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/MICSTI/imsazon/hello"
 	"github.com/MICSTI/imsazon/inmemory"
+	"github.com/MICSTI/imsazon/auth"
 )
 
 const (
@@ -35,14 +36,18 @@ func main() {
 	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
 
 	// init in-memory repository stores here
-	/*var (
+	var (
 		users			= inmemory.NewUserRepository()
-	)*/
+	)
 
 	// all services are initialized here
 	var hs hello.Service
 	hs = hello.NewService()
 	hs = hello.NewLoggingService(log.With(logger, "component", "hello"), hs)
+
+	var as auth.Service
+	as = auth.NewService(users)
+	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
@@ -51,6 +56,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
+	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

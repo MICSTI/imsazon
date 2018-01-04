@@ -53,7 +53,7 @@ func main() {
 	// error handling
 	errs := make(chan error, 2)
 	go func() {
-		logger.Log("transport", "http", "address", "httpAddr", "msg", "listening")
+		logger.Log("transport", "http", "address", *httpAddr, "msg", "listening")
 		errs <- http.ListenAndServe(*httpAddr, nil)
 	}()
 	go func() {

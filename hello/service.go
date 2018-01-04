@@ -5,7 +5,9 @@
 
 package hello
 
-import "errors"
+import (
+	"errors"
+)
 
 // ErrInvalidArgument is returned when on or more arguments are invalid
 var ErrInvalidArgument = errors.New("Invalid argument")

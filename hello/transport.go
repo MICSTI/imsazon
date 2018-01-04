@@ -1,7 +1,7 @@
 package hello
 
 import (
-	"github.com/go-kit/kit/log"
+	kitlog "github.com/go-kit/kit/log"
 	kithttp "github.com/go-kit/kit/transport/http"
 
 	"net/http"
@@ -12,7 +12,7 @@ import (
 )
 
 // MakeHandler returns a handler for the hello service
-func MakeHandler(hs Service, logger log.Logger) http.Handler {
+func MakeHandler(hs Service, logger kitlog.Logger) http.Handler {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorLogger(logger),
 		kithttp.ServerErrorEncoder(encodeError),

@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"fmt"
 	"github.com/MICSTI/imsazon/hello"
+	"github.com/MICSTI/imsazon/inmemory"
 )
 
 const (
@@ -33,9 +34,12 @@ func main() {
 	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
 	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
 
-	// TODO init some stuff here?
+	// init in-memory repository stores here
+	/*var (
+		users			= inmemory.NewUserRepository()
+	)*/
 
-	// all services are declared here
+	// all services are initialized here
 	var hs hello.Service
 	hs = hello.NewService()
 	hs = hello.NewLoggingService(log.With(logger, "component", "hello"), hs)

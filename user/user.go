@@ -30,9 +30,17 @@ func New(id UserId, name string, email string, username string, password string,
 
 // Repository provides access to an in-memory user store
 type Repository interface {
+	// adds a user to the store
 	Add(user *User) error
+
+	// attempts to find the user by id inside the store
 	Find(id UserId) (*User, error)
+
+	// returns an array of all users inside the store
 	FindAll() []*User
+
+	// checks if the login credentials match a user inside the store
+	CheckLogin(username string, password string) (*User, error)
 }
 
 // ErrUnknown is used if the user cannot be found

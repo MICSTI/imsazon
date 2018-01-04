@@ -4,7 +4,10 @@
 
 package auth
 
-import "errors"
+import (
+	"errors"
+	"github.com/MICSTI/imsazon/user"
+)
 
 // ErrInvalidArgument is returned when one or more arguments are invalid
 var ErrInvalidArgument = errors.New("Invalid argument")
@@ -19,5 +22,20 @@ type Service interface {
 }
 
 type service struct {
-	
+	users		user.Repository
+}
+
+func (s *service) Login(username string, password string) (string, error) {
+	return "Hallo", nil
+}
+
+func (s *service) Check(token string) (bool, error) {
+	return true, nil
+}
+
+// NewService returns a new instance of the auth service
+func NewService(users user.Repository) Service {
+	return &service{
+		users:		users,
+	}
 }

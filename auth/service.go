@@ -9,6 +9,7 @@ import (
 	"github.com/MICSTI/imsazon/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
+	"go/token"
 )
 
 // JWT secret - this should definitely be stored more securely
@@ -77,8 +78,9 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		return jwtSecret, nil
 	})
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims["sub"].(user.UserId), nil
+	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		//return claims["sub"].(user.UserId), nil
+		return user.U0003, nil
 	} else {
 		return "", ErrExpired
 	}

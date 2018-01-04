@@ -9,6 +9,7 @@ import (
 	"github.com/MICSTI/imsazon/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
+	"go/token"
 )
 
 // JWT secret - this should definitely be stored more securely
@@ -68,7 +69,8 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		return "", ErrInvalidArgument
 	}
 
-	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	//token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// validate the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, ErrInvalid

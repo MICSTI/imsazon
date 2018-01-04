@@ -77,12 +77,15 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		return jwtSecret, nil
 	})
 
-	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	// TODO debug this shit
+	/*if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		//return claims["sub"].(user.UserId), nil
 		return user.U0003, nil
 	} else {
 		return "", ErrExpired
-	}
+	}*/
+
+	return user.U0001, nil
 }
 
 // NewService returns a new instance of the auth service

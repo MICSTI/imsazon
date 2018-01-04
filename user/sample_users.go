@@ -9,7 +9,7 @@ var (
 
 // Sample users
 var (
-	UserRey = &User{U0001, "Rey", "rey@jedi.com", "rey", "rey123", Standard}
-	UserKylo = &User{U0002, "Kylo", "kylo@firstorder.com", "kylo", "kylo123", Standard}
-	UserLuke = &User{ U0003, "Luke", "luke@jedi.com", "luke", "luke123", Admin}
+	Rey = &User{U0001, "Rey", "rey@jedi.com", "rey", "rey123", Standard}
+	Kylo = &User{U0002, "Kylo", "kylo@firstorder.com", "kylo", "kylo123", Standard}
+	Luke = &User{ U0003, "Luke", "luke@jedi.com", "luke", "luke123", Admin}
 )

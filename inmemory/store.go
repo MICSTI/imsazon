@@ -61,5 +61,9 @@ func NewUserRepository() user.Repository {
 		users: make(map[user.UserId]*user.User),
 	}
 
+	r.users[user.U0001] = user.Rey
+	r.users[user.U0002] = user.Kylo
+	r.users[user.U0003] = user.Luke
+
 	return r
 }

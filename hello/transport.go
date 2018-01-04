@@ -34,8 +34,8 @@ func MakeHandler(hs Service, logger kitlog.Logger) http.Handler {
 
 	r := mux.NewRouter()
 
-	r.Handle("/hello", sayHelloHandler).Methods("GET")
-	r.Handle("/hello/{name}", sayHelloToHandler).Methods("GET")
+	r.Handle("/hello/general", sayHelloHandler).Methods("GET")
+	r.Handle("/hello/to/{name}", sayHelloToHandler).Methods("GET")
 
 	return r
 }

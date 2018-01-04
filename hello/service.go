@@ -34,7 +34,7 @@ func (s *service) SayHelloTo(name string) (string, error) {
 		return "", ErrInvalidArgument
 	}
 
-	return "The warmest of welcomes to you, " + name, nil
+	return "The warmest of welcomes to you, dear " + name, nil
 }
 
 func NewService() Service {

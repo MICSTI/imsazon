@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"context"
 	"errors"
-	"go/token"
 	"github.com/gorilla/mux"
 )
 

@@ -14,6 +14,7 @@ type userRepository struct {
 	users	map[user.UserId]*user.User
 }
 
+// adds a user to the repository store
 func (r *userRepository) Add(u *user.User) error {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
@@ -21,6 +22,7 @@ func (r *userRepository) Add(u *user.User) error {
 	return nil
 }
 
+// attempts to find the user by UserId inside the repository store
 func (r *userRepository) Find(id user.UserId) (*user.User, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
@@ -30,6 +32,7 @@ func (r *userRepository) Find(id user.UserId) (*user.User, error) {
 	return nil, user.ErrUnknown
 }
 
+// returns alls users in an array
 func (r *userRepository) FindAll() []*user.User {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
@@ -40,6 +43,7 @@ func (r *userRepository) FindAll() []*user.User {
 	return u
 }
 
+// checks the login credentials of a user
 func (r *userRepository) CheckLogin(username string, password string) (*user.User, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
@@ -56,6 +60,7 @@ func (r *userRepository) CheckLogin(username string, password string) (*user.Use
 	return nil, user.ErrUnknown
 }
 
+// returns an instance of a user repository
 func NewUserRepository() user.Repository {
 	r := &userRepository{
 		users: make(map[user.UserId]*user.User),

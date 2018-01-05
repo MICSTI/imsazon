@@ -32,7 +32,7 @@ func New(id UserId, name string, email string, username string, password string,
 	}
 }
 
-// Repository provides access to an in-memory user store
+// Repository interface provides access to an in-memory user store
 type Repository interface {
 	// adds a user to the store
 	Add(user *User) error

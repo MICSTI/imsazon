@@ -22,8 +22,8 @@ type EmailUser struct {
 
 // add our own email user configuration
 var imsazonMailConfig = &EmailUser{
-	"office.imsazon@gmail.com",
-	"QILzLpnLisnvFx2oHBEr",
+	"pingservice4242",
+	"&v2q?M9IscM0I%xv^9n8bPy4pt8c0/l|zjT8=Sx3p^X*`77dwwR,j0ei`UB:&T^0",
 	"smtp.gmail.com",
 	587,
 }

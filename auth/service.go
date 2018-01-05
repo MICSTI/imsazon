@@ -53,8 +53,6 @@ func (s *service) Login(username string, password string) (string, error) {
 		return "", err
 	}
 
-	return "", nil
-
 	// create the claims
 	claims := CustomClaims{
 		u.Role.String(),
@@ -68,8 +66,6 @@ func (s *service) Login(username string, password string) (string, error) {
 	// create the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, _ := token.SignedString(jwtSecret)
-
-	fmt.Printf("%v %v", signedToken, err)
 
 	return signedToken, nil
 

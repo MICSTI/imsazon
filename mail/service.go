@@ -106,12 +106,12 @@ func(s *service) Send(smtpTemplate SmtpTemplateData) error {
 	return nil*/
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", "office.imsazon@gmail.com")
+	m.SetHeader("From", "imsazon@micsti.at")
 	m.SetHeader("To", "stifter.michael@gmx.net")
 	m.SetHeader("Subject", "Hello!")
 	m.SetBody("text/html", "Hello <b>Bob</b> and <i>Cora</i>!")
 
-	d := gomail.NewDialer("smtp.gmail.com", 587, "office.imsazon@gmail.com", "QILzLpnLisnvFx2oHBEr")
+	d := gomail.NewDialer("w00e8823.kasserver.com", 587, "m042be71", "wennG7TFqE66cQA8")
 
 	// Send the email to Bob, Cora and Dan.
 	if err := d.DialAndSend(m); err != nil {

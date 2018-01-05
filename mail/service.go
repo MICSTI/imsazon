@@ -6,10 +6,6 @@ package mail
 
 import (
 	"errors"
-	"bytes"
-	"text/template"
-	"net/smtp"
-	"strconv"
 	"gopkg.in/gomail.v2"
 )
 

@@ -67,23 +67,6 @@ func (s *service) Login(username string, password string) (string, error) {
 	signedToken, _ := token.SignedString(jwtSecret)
 
 	return signedToken, nil
-
-	/* 			OLD METHOD
-	// create the JWT auth token for the user
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	// create a map to store the claims
-	claims := token.Claims.(jwt.MapClaims)
-
-	// set token claims
-	claims["sub"] = u.Id
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	claims["role"] = u.Role.String()
-
-	// sign the token with the secret
-	signedToken, _ := token.SignedString(jwtSecret)
-
-	return signedToken, nil*/
 }
 
 func (s *service) Check(tokenString string) (user.UserId, error) {
@@ -91,6 +74,31 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		return "", ErrInvalidArgument
 	}
 
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if token.Valid {
+		if claims, ok := token.Claims.(*CustomClaims); ok {
+			userId := user.UserId(claims.Subject)
+
+			return userId, nil
+		} else {
+			return "", ErrInvalid
+		}
+	} else if ve, ok := err.(*jwt.ValidationError); ok {
+		if ve.Errors & jwt.ValidationErrorMalformed != 0 {
+			return "", ErrInvalid
+		} else if ve.Errors & (jwt.ValidationErrorExpired | jwt.ValidationErrorNotValidYet) != 0 {
+			return "", ErrExpired
+		} else {
+			return "", ErrInvalid
+		}
+	}
+
+	return "", ErrInvalid
+
+	/*
 	// validate the token
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
@@ -123,7 +131,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 	default:
 		// something else went wrong
 		return "", ErrInvalid
-	}
+	}*/
 }
 
 // NewService returns a new instance of the auth service

@@ -12,9 +12,10 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
-	/*"github.com/MICSTI/imsazon/mail"
+	"github.com/MICSTI/imsazon/mail"
 	"github.com/creamdog/gonfig"
-	log2 "log"*/
+	log2 "log"
+	"github.com/MICSTI/imsazon/user"
 )
 
 const (
@@ -35,7 +36,7 @@ func main() {
 	flag.Parse()
 
 	// read the config file
-	/*f, err := os.Open("config.json")
+	f, err := os.Open("config.json")
 	if err != nil {
 		log2.Fatal("Could not read file config.json")
 	}
@@ -64,7 +65,14 @@ func main() {
 	mailPassword, err := config.GetString("mail/password", "")
 	if err != nil {
 		log2.Fatal("Could not get mail password config value")
-	}*/
+	}
+
+	mailServerCredentials := mail.MailServerCredentials{
+		Host: 		mailHost,
+		Port:		mailPort,
+		Username:	mailUsername,
+		Password:	mailPassword,
+	}
 
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
@@ -84,9 +92,9 @@ func main() {
 	as = auth.NewService(users)
 	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
-	/*var ms mail.Service
-	ms = mail.NewService()
-	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)*/
+	var ms mail.Service
+	ms = mail.NewService(mailServerCredentials)
+	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)
 
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
@@ -96,7 +104,7 @@ func main() {
 
 	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
 	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
-	//mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
+	mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

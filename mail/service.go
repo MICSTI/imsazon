@@ -10,7 +10,6 @@ import (
 	"text/template"
 	"net/smtp"
 	"strconv"
-	"crypto/tls"
 )
 
 // EmailUser describes the login credentials for a mail server
@@ -95,53 +94,17 @@ func(s *service) Send(smtpTemplate SmtpTemplateData) error {
 		imsazonMailConfig.EmailServer,
 	)
 
-	// TLS config
-	tlsconfig := &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName:         imsazonMailConfig.EmailServer,
-	}
+	err = smtp.SendMail(
+		imsazonMailConfig.EmailServer + ":" + strconv.Itoa(imsazonMailConfig.Port),
+		auth,
+		imsazonMailConfig.Username,
+		[]string{imsazonMailConfig.Username},
+		doc.Bytes(),
+	)
 
-	conn, err := tls.Dial("tcp", imsazonMailConfig.EmailServer + ":" + strconv.Itoa(imsazonMailConfig.Port), tlsconfig)
 	if err != nil {
 		return err
 	}
-
-	client, err := smtp.NewClient(conn, imsazonMailConfig.EmailServer)
-	if err != nil {
-		return err
-	}
-
-	// step 1: Use Auth
-	if err = client.Auth(auth); err != nil {
-		return err
-	}
-
-	// step 2: add all from and to
-	if err = client.Mail(smtpTemplate.From); err != nil {
-		return err
-	}
-
-	if err = client.Rcpt(smtpTemplate.To); err != nil {
-		return err
-	}
-
-	// Data
-	w, err := client.Data()
-	if err != nil {
-		return err
-	}
-
-	_, err = w.Write([]byte(smtpTemplate.Body))
-	if err != nil {
-		return err
-	}
-
-	err = w.Close()
-	if err != nil {
-		return err
-	}
-
-	client.Quit()
 
 	return nil
 }

@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
+	"net/mail"
 )
 
 const (

@@ -35,7 +35,9 @@ func main() {
 	flag.Parse()
 
 	// read the config file
-	f, err := os.Open("./config.json")
+	pwd, _ := os.Getwd()
+
+	f, err := os.Open(pwd + "/config.json")
 	if err != nil {
 		log2.Fatal("Could not read file config.json")
 	}

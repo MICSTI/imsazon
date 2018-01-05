@@ -78,6 +78,11 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		return jwtSecret, nil
 	})
 
+	// for the case we just received a random string
+	if token == nil {
+		return "", ErrInvalid
+	}
+
 	if token.Valid {
 		if claims, ok := token.Claims.(*CustomClaims); ok {
 			userId := user.UserId(claims.Subject)
@@ -97,41 +102,6 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 	}
 
 	return "", ErrInvalid
-
-	/*
-	// validate the token
-	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
-	})
-
-	switch err.(type) {
-	case nil:
-		// no error
-
-		// we still have to check the token's validity
-		if !token.Valid {
-			return "", ErrInvalid
-		}
-
-		return user.U0001, nil
-
-	case *jwt.ValidationError:
-		// something went wrong during the validation
-		vErr := err.(*jwt.ValidationError)
-
-		switch vErr.Errors {
-		case jwt.ValidationErrorExpired:
-			// the token has expired
-			return "", ErrExpired
-
-		default:
-			return "", ErrInvalid
-		}
-
-	default:
-		// something else went wrong
-		return "", ErrInvalid
-	}*/
 }
 
 // NewService returns a new instance of the auth service

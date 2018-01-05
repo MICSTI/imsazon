@@ -15,7 +15,6 @@ import (
 	"github.com/MICSTI/imsazon/mail"
 	"github.com/creamdog/gonfig"
 	log2 "log"
-	"github.com/MICSTI/imsazon/user"
 )
 
 const (

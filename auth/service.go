@@ -8,6 +8,7 @@ import (
 	"errors"
 	"github.com/MICSTI/imsazon/user"
 	"github.com/dgrijalva/jwt-go"
+	"time"
 )
 
 // JWT secret - this should definitely be stored more securely
@@ -46,7 +47,7 @@ func (s *service) Login(username string, password string) (string, error) {
 		return "", ErrInvalidArgument
 	}
 
-	_, err := s.users.CheckLogin(username, password)
+	u, err := s.users.CheckLogin(username, password)
 	if err != nil {
 		return "", err
 	}
@@ -54,13 +55,24 @@ func (s *service) Login(username string, password string) (string, error) {
 	return "", nil
 
 	// create the claims
-	/*claims := CustomClaims{
+	claims := CustomClaims{
 		u.Role.String(),
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Issuer: "imsazon",
-		}
-	}*/
+			Subject: u.Id.String(),
+		},
+	}
+
+	// create the token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	signedToken, err := token.SignedString(jwtSecret)
+
+	if err != nil {
+		return "", err
+	}
+
+	return signedToken, nil
 
 	/* 			OLD METHOD
 	// create the JWT auth token for the user

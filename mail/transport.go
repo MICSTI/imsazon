@@ -43,7 +43,7 @@ func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) 
 	}
 
 	return sendRequest{
-		SmtpTemplate:	SmtpTemplateData{
+		email:	Email{
 			From:		body.From,
 			To:			body.To,
 			Subject:	body.Subject,

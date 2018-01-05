@@ -6,7 +6,7 @@ import (
 )
 
 type sendRequest struct {
-	SmtpTemplate			SmtpTemplateData
+	email			Email
 }
 
 type sendResponse struct {
@@ -18,7 +18,7 @@ func(r sendResponse) error() error { return r.Err }
 func makeSendEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(sendRequest)
-		err := s.Send(req.SmtpTemplate)
+		err := s.Send(req.email)
 		return sendResponse{Err: err}, nil
 	}
 }

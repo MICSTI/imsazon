@@ -15,13 +15,14 @@ func NewLoggingService(logger log.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) Send(smtpTemplate SmtpTemplateData) (err error) {
+func (s *loggingService) Send(email Email) (err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "Send",
+			"to", email.To,
 			"took", time.Since(begin),
 			"err", err,
 		)
 	}(time.Now())
-	return s.Service.Send(smtpTemplate)
+	return s.Service.Send(email)
 }

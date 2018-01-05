@@ -12,7 +12,9 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
-	"github.com/MICSTI/imsazon/mail"
+	/*"github.com/MICSTI/imsazon/mail"
+	"github.com/creamdog/gonfig"
+	log2 "log"*/
 )
 
 const (
@@ -32,6 +34,38 @@ func main() {
 
 	flag.Parse()
 
+	// read the config file
+	/*f, err := os.Open("config.json")
+	if err != nil {
+		log2.Fatal("Could not read file config.json")
+	}
+	defer f.Close();
+	config, err := gonfig.FromJson(f)
+	if err != nil {
+		log2.Fatal("Could not get config from config.json")
+	}
+
+	// Mail configuration
+	mailHost, err := config.GetString("mail/host", "")
+	if err != nil {
+		log2.Fatal("Could not get mail host config value")
+	}
+
+	mailPort, err := config.GetInt("mail/port", 0)
+	if err != nil {
+		log2.Fatal("Could not get mail port config value")
+	}
+
+	mailUsername, err := config.GetString("mail/username", "")
+	if err != nil {
+		log2.Fatal("Could not get mail username config value")
+	}
+
+	mailPassword, err := config.GetString("mail/password", "")
+	if err != nil {
+		log2.Fatal("Could not get mail password config value")
+	}*/
+
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
 	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
@@ -50,9 +84,9 @@ func main() {
 	as = auth.NewService(users)
 	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
-	var ms mail.Service
+	/*var ms mail.Service
 	ms = mail.NewService()
-	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)
+	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)*/
 
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
@@ -62,7 +96,7 @@ func main() {
 
 	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
 	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
-	mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
+	//mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

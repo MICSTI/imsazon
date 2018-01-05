@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
+	"github.com/MICSTI/imsazon/mail"
 )
 
 const (
@@ -49,6 +50,10 @@ func main() {
 	as = auth.NewService(users)
 	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
+	var ms mail.Service
+	ms = mail.NewService()
+	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)
+
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
 
@@ -57,6 +62,7 @@ func main() {
 
 	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
 	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
+	mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

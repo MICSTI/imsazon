@@ -56,7 +56,7 @@ func (s *service) Login(username string, password string) (string, error) {
 	claims := CustomClaims{
 		u.Role.String(),
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Truncate(time.Hour * 24).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Issuer: "imsazon",
 			Subject: u.Id.String(),
 		},

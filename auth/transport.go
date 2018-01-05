@@ -94,6 +94,10 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 		w.WriteHeader(http.StatusBadRequest)
 	case user.ErrUnknown:
 		w.WriteHeader(http.StatusForbidden)
+	case ErrInvalid:
+		w.WriteHeader(http.StatusForbidden)
+	case ErrExpired:
+		w.WriteHeader(http.StatusForbidden)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 	}

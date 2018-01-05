@@ -1,17 +1,17 @@
 package main
 
 import (
-	"os"
 	"flag"
+	"os"
 
+	"fmt"
+	"github.com/MICSTI/imsazon/auth"
+	"github.com/MICSTI/imsazon/hello"
+	"github.com/MICSTI/imsazon/inmemory"
 	"github.com/go-kit/kit/log"
 	"net/http"
 	"os/signal"
 	"syscall"
-	"fmt"
-	"github.com/MICSTI/imsazon/hello"
-	"github.com/MICSTI/imsazon/inmemory"
-	"github.com/MICSTI/imsazon/auth"
 )
 
 const (
@@ -37,7 +37,7 @@ func main() {
 
 	// init in-memory repository stores here
 	var (
-		users			= inmemory.NewUserRepository()
+		users = inmemory.NewUserRepository()
 	)
 
 	// all services are initialized here

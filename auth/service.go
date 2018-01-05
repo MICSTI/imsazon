@@ -9,7 +9,6 @@ import (
 	"github.com/MICSTI/imsazon/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
-	"fmt"
 )
 
 // JWT secret - this should definitely be stored more securely

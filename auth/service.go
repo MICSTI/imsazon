@@ -82,9 +82,12 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 			return "", ErrInvalid
 		}
 
-		// TODO now we have to parse the claims
-
-		return user.U0001, nil
+		if claims, ok := token.Claims.(jwt.MapClaims); ok {
+			userId := claims["sub"].(user.UserId)
+			return userId, nil
+		} else {
+			return "", ErrInvalid
+		}
 
 	case *jwt.ValidationError:
 		// something went wrong during the validation
@@ -103,26 +106,6 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 		// something else went wrong
 		return "", ErrInvalid
 	}
-
-	//token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-	jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// validate the signing method
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, ErrInvalid
-		}
-
-		return jwtSecret, nil
-	})
-
-	// TODO debug this shit
-	/*if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		//return claims["sub"].(user.UserId), nil
-		return user.U0003, nil
-	} else {
-		return "", ErrExpired
-	}*/
-
-	return user.U0001, nil
 }
 
 // NewService returns a new instance of the auth service

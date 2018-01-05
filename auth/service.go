@@ -36,16 +36,34 @@ type service struct {
 	users		user.Repository
 }
 
+// create a custom JWT claims struct
+type CustomClaims struct {
+	Role string `json:"role"`
+	jwt.StandardClaims
+}
+
 func (s *service) Login(username string, password string) (string, error) {
 	if username == "" || password == "" {
 		return "", ErrInvalidArgument
 	}
 
-	u, err := s.users.CheckLogin(username, password)
+	_, err := s.users.CheckLogin(username, password)
 	if err != nil {
 		return "", err
 	}
 
+	return "", nil
+
+	// create the claims
+	/*claims := CustomClaims{
+		u.Role.String(),
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+			Issuer: "imsazon",
+		}
+	}*/
+
+	/* 			OLD METHOD
 	// create the JWT auth token for the user
 	token := jwt.New(jwt.SigningMethodHS256)
 
@@ -60,7 +78,7 @@ func (s *service) Login(username string, password string) (string, error) {
 	// sign the token with the secret
 	signedToken, _ := token.SignedString(jwtSecret)
 
-	return signedToken, nil
+	return signedToken, nil*/
 }
 
 func (s *service) Check(tokenString string) (user.UserId, error) {
@@ -69,7 +87,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 	}
 
 	// validate the token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 
@@ -82,9 +100,12 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 			return "", ErrInvalid
 		}
 
+		userId := token.Claims.
+
 		if claims, ok := token.Claims.(jwt.MapClaims); ok {
-			userId := claims["sub"].(user.UserId)
-			return userId, nil
+
+			//userId := claims["sub"].(user.UserId)
+			//return userId, nil
 		} else {
 			return "", ErrInvalid
 		}

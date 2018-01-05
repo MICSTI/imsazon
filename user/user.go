@@ -7,6 +7,10 @@ import "errors"
 // UserId uniquely identifies a user
 type UserId string
 
+func (s UserId) String() string {
+	return string(s)
+}
+
 type User struct {
 	Id				UserId
 	Name			string

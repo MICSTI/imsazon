@@ -9,6 +9,7 @@ import (
 	"github.com/MICSTI/imsazon/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
+	"fmt"
 )
 
 // JWT secret - this should definitely be stored more securely
@@ -66,11 +67,9 @@ func (s *service) Login(username string, password string) (string, error) {
 
 	// create the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString(jwtSecret)
+	signedToken, _ := token.SignedString(jwtSecret)
 
-	if err != nil {
-		return "", err
-	}
+	fmt.Printf("%v %v", signedToken, err)
 
 	return signedToken, nil
 

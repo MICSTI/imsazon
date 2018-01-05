@@ -10,6 +10,7 @@ import (
 	"text/template"
 	"net/smtp"
 	"strconv"
+	"gopkg.in/gomail.v2"
 )
 
 // EmailUser describes the login credentials for a mail server
@@ -66,7 +67,7 @@ type service struct {
 }
 
 func(s *service) Send(smtpTemplate SmtpTemplateData) error {
-	if smtpTemplate == (SmtpTemplateData{}) {
+	/*if smtpTemplate == (SmtpTemplateData{}) {
 		return ErrInvalidArgument
 	}
 
@@ -103,6 +104,21 @@ func(s *service) Send(smtpTemplate SmtpTemplateData) error {
 	)
 
 	if err != nil {
+		return err
+	}
+
+	return nil*/
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", "office.imsazon@gmail.com")
+	m.SetHeader("To", "stifter.michael@gmx.net")
+	m.SetHeader("Subject", "Hello!")
+	m.SetBody("text/html", "Hello <b>Bob</b> and <i>Cora</i>!")
+
+	d := gomail.NewDialer("smtp.gmail.com", 587, "office.imsazon@gmail.com", "QILzLpnLisnvFx2oHBEr")
+
+	// Send the email to Bob, Cora and Dan.
+	if err := d.DialAndSend(m); err != nil {
 		return err
 	}
 

@@ -44,11 +44,11 @@ type Repository interface {
 	// adds a product to the store
 	// if the product id already exists, the name and description properties are updated and the quantity added
 	// returns a new product object with the current stock status
-	Add(product *Product) (Product, error)
+	Add(product *Product) (*Product, error)
 
 	// withdraws a product from the store
 	// returns a new product object with the current stock status
-	Withdraw(product *Product) (Product, error)
+	Withdraw(product *Product) (*Product, error)
 }
 
 var ErrProductUnknown = errors.New("Unknown product")

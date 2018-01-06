@@ -25,6 +25,7 @@ func main() {
 	var (
 		// read environment variables or use the default values from above
 		addr = envString("PORT", defaultPort)
+		configFilePath = envString("CONFIG_FILE_PATH", "")
 
 		httpAddr = flag.String("http.addr", ":"+addr, "HTTP listen address")
 
@@ -34,17 +35,14 @@ func main() {
 
 	flag.Parse()
 
-	// read the config file
-	pwd, _ := os.Getwd()
-
-	f, err := os.Open(pwd + "/config.json")
+	f, err := os.Open(configFilePath)
 	if err != nil {
-		log2.Fatal("Could not read file config.json")
+		log2.Fatal("Could not read config file")
 	}
 	defer f.Close();
 	config, err := gonfig.FromJson(f)
 	if err != nil {
-		log2.Fatal("Could not get config from config.json")
+		log2.Fatal("Could not get config from config file")
 	}
 
 	// Mail configuration

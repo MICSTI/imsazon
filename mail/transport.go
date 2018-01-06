@@ -36,6 +36,7 @@ func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) 
 		To			string		`json:"to"`
 		Subject		string		`json:"subject"`
 		Body		string		`json:"body"`
+		ContentType	string		`json:"contentType"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -44,10 +45,11 @@ func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) 
 
 	return sendRequest{
 		email:	Email{
-			From:		body.From,
-			To:			body.To,
-			Subject:	body.Subject,
-			Body:		body.Body,
+			From:			body.From,
+			To:				body.To,
+			Subject:		body.Subject,
+			Body:			body.Body,
+			ContentType:	body.ContentType,
 			},
 	}, nil
 }

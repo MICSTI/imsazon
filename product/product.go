@@ -35,6 +35,12 @@ func New(id ProductId, name string, description string, category string, imageUr
 
 // Repository interface provides access to an in-memory product store
 type Repository interface {
+	// tries to find a product in the store by ProductId
+	Find(id ProductId) (*Product, error)
+
+	// returns an array of all products inside the store
+	FindAll() ([]*Product, error)
+
 	// adds a product to the store
 	// if the product id already exists, the name and description properties are updated and the quantity added
 	// returns a new product object with the current stock status

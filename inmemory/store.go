@@ -154,3 +154,12 @@ func (r *productRepository) FindAll() []*product.Product {
 	}
 	return p
 }
+
+func NewProductRepository() product.Repository {
+	r := &productRepository{
+		products: make(map[product.ProductId]*product.Product),
+	}
+
+	r.products[product.P0001] = product.Lightsaber
+	r.products[product.P0002] = product.MilleniumFalcon
+}

@@ -42,7 +42,7 @@ type Repository interface {
 	Find(id ProductId) (*Product, error)
 
 	// returns an array of all products inside the store
-	FindAll() ([]*Product, error)
+	FindAll() []*Product
 
 	// adds a product to the store
 	// if the product id already exists, the name and description properties are updated and the quantity added

@@ -30,4 +30,34 @@ var (
 		30000.00,
 		1,
 	}
+
+	BB8 = &Product{
+		P0003,
+		"BB 8",
+		"Extraordinarily helpful droid",
+		"Droids",
+		"https://images.fun.com/products/34909/2-1-63328/star-wars-episode-7-rey-jakku-and-bb8-black-series-set.jpg",
+		12499,
+		3,
+	}
+
+	Podracer = &Product{
+		P0004,
+		"Podracer",
+		"Lightning-fast podracer - nobody will be able to beat you",
+		"Mobility",
+		"https://images-na.ssl-images-amazon.com/images/I/41j3vMHSX0L._AA300_.jpg",
+		3499.00,
+		6,
+	}
+
+	CarboniteFreezer = &Product{
+		P0005,
+		"Carbonite Freezer",
+		"Very useful in case you need to freeze someone in carbonite",
+		"Utilities",
+		"https://s-i.huffpost.com/gen/1359887/images/o-HAN-SOLO-CARBONITE-facebook.jpg",
+		39999.99,
+		2,
+	}
 )

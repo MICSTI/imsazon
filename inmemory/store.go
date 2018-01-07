@@ -97,7 +97,7 @@ func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 
 		stored.Quantity += p.Quantity
 
-		return r.Store(stored)
+		return stored, nil
 	} else {
 		// we just have to put the product into the store
 		return r.Store(p)
@@ -121,10 +121,6 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
-	stored.Name = p.Name
-	stored.Description = p.Description
-	stored.Price = p.Price
-	stored.ImageUrl = p.ImageUrl
 	stored.Quantity -= p.Quantity
 
 	return stored, nil

@@ -37,8 +37,16 @@ func (r addResponse) error() error { return r.Err }
 
 func makeAddEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(addRequest)
-		updatedProduct, err := s.Add(&req.Product)
+		//req := request.(addRequest)
+		//updatedProduct, err := s.Add(&req.Product)
+
+		updatedProduct := &product.Product{
+			Id: product.ProductId("P99"),
+			Name: "WTF",
+		}
+
+		err := error(nil)
+
 		return addResponse{UpdatedProduct: updatedProduct, Err: err}, nil
 	}
 }

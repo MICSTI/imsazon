@@ -162,4 +162,6 @@ func NewProductRepository() product.Repository {
 
 	r.products[product.P0001] = product.Lightsaber
 	r.products[product.P0002] = product.MilleniumFalcon
+
+	return nil
 }

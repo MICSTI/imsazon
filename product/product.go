@@ -35,6 +35,9 @@ func New(id ProductId, name string, description string, category string, imageUr
 
 // Repository interface provides access to an in-memory product store
 type Repository interface {
+	// directly stores a product in the store
+	Store(product *Product) (*Product, error)
+
 	// tries to find a product in the store by ProductId
 	Find(id ProductId) (*Product, error)
 

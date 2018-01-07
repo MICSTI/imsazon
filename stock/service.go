@@ -19,10 +19,10 @@ type Service interface {
 	GetItems() []*product.Product
 
 	// Add adds an item with the specified quantity to the stock. Returns a new product object with the updated stock information.
-	Add(productToAdd *product.Product) (product.Product, error)
+	Add(productToAdd *product.Product) (*product.Product, error)
 
 	// Withdraw removes the specified quantity from the stock. Returns a new product object with the updated stock information.
-	Withdraw(productToWithdraw *product.Product) (product.Product, error)
+	Withdraw(productToWithdraw *product.Product) (*product.Product, error)
 }
 
 type service struct {

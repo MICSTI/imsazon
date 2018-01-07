@@ -129,6 +129,8 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 	stored.Description = p.Description
 	stored.Price = p.Price
 	stored.ImageUrl = p.ImageUrl
+
+	return nil, nil
 }
 
 func (r *productRepository) Find(id product.ProductId) (*product.Product, error) {

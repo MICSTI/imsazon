@@ -6,8 +6,8 @@ package inmemory
 
 import (
 	"sync"
-	"github.com/MICSTI/imsazon/user"
-	"github.com/MICSTI/imsazon/product"
+	"github.com/MICSTI/imsazon/models/user"
+	"github.com/MICSTI/imsazon/models/product"
 )
 
 /* ---------- USER REPOSITORY ---------- */

@@ -8,7 +8,7 @@ package stock
 
 import (
 	"errors"
-	"github.com/MICSTI/imsazon/product"
+	"github.com/MICSTI/imsazon/models/product"
 )
 
 // ErrInvalidArgument is returned when on or more arguments are invalid

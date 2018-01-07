@@ -1,7 +1,7 @@
 package stock
 
 import (
-	"github.com/MICSTI/imsazon/product"
+	"github.com/MICSTI/imsazon/models/product"
 	"github.com/go-kit/kit/endpoint"
 	"context"
 )

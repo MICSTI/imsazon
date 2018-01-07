@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/go-kit/kit/log"
 	"time"
-	"github.com/MICSTI/imsazon/user"
+	"github.com/MICSTI/imsazon/models/user"
 )
 
 type loggingService struct {

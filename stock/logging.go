@@ -2,7 +2,7 @@ package stock
 
 import (
 	"github.com/go-kit/kit/log"
-	"github.com/MICSTI/imsazon/product"
+	"github.com/MICSTI/imsazon/models/product"
 	"time"
 )
 

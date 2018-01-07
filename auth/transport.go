@@ -8,7 +8,7 @@ import (
 	"context"
 	"errors"
 	"github.com/gorilla/mux"
-	"github.com/MICSTI/imsazon/user"
+	"github.com/MICSTI/imsazon/models/user"
 )
 
 // MakeHandler returns the handler for the auth service

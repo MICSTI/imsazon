@@ -6,7 +6,7 @@ package auth
 
 import (
 	"errors"
-	"github.com/MICSTI/imsazon/user"
+	"github.com/MICSTI/imsazon/models/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )

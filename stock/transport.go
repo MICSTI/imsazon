@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"context"
 	"net/http"
-	"github.com/MICSTI/imsazon/product"
+	"github.com/MICSTI/imsazon/models/product"
 	"github.com/gorilla/mux"
 )
 

@@ -101,7 +101,7 @@ func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
-	stored.Quantity += p.Quantity
+	stored.Quantity -= 1
 
 	return stored, nil
 }

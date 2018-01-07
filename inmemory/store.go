@@ -89,19 +89,23 @@ func (r *productRepository) Store(p *product.Product) (*product.Product, error) 
 }
 
 func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
-	// first check if the product already exists
+	// first check if the product even exists
 	stored, err := r.Find(p.Id)
 
 	if err != nil {
-		// we just have to put the product into the store
-		return r.Store(p)
+		return nil, err
+	}
+
+	// check if there are enough items for withdrawing
+	if stored.Quantity < p.Quantity {
+		return nil, product.ErrNotEnoughItems
 	}
 
 	// update the properties of the stock item
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
-	stored.Quantity += p.Quantity
+	stored.Quantity -= p.Quantity
 
 	return stored, nil
 }

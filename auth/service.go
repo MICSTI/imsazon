@@ -30,7 +30,7 @@ type Service interface {
 }
 
 type service struct {
-	jwtSecret	string
+	jwtSecret	[]byte
 	users		user.Repository
 }
 
@@ -103,7 +103,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 }
 
 // NewService returns a new instance of the auth service
-func NewService(jwtSecret string, users user.Repository) Service {
+func NewService(jwtSecret []byte, users user.Repository) Service {
 	return &service{
 		jwtSecret:	jwtSecret,
 		users:		users,

@@ -47,10 +47,13 @@ func main() {
 	}
 
 	// read JWT secret from config file
-	jwtSecret, err := config.GetString("jwt/secret", "")
+	jwtSecretString, err := config.GetString("jwt/secret", "")
 	if err != nil {
 		log2.Fatal("Could not get JWT secret config value")
 	}
+
+	// parse string to byte array
+	jwtSecret := []byte(jwtSecretString)
 
 	// Mail configuration
 	mailHost, err := config.GetString("mail/host", "")

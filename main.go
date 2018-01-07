@@ -96,7 +96,7 @@ func main() {
 	hs = hello.NewLoggingService(log.With(logger, "component", "hello"), hs)
 
 	var as auth.Service
-	as = auth.NewService(users)
+	as = auth.NewService(jwtSecret, users)
 	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
 	var ms mail.Service

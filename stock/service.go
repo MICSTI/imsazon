@@ -36,13 +36,14 @@ func(s *service) GetItems() []*product.Product {
 }
 
 func(s *service) Add(productToAdd *product.Product) (*product.Product, error) {
-	p, err := s.products.Add(productToAdd)
+	/*p, err := s.products.Add(productToAdd)
 
 	if err != nil {
 		return &product.Product{}, err
 	}
 
-	return p, nil
+	return p, nil*/
+	return productToAdd, nil
 }
 
 func(s *service) Withdraw(productToWithdraw *product.Product) (*product.Product, error) {

@@ -52,3 +52,4 @@ type Repository interface {
 }
 
 var ErrProductUnknown = errors.New("Unknown product")
+var ErrNotEnoughItems = errors.New("There are not enough items in the store for this operation")

@@ -7,8 +7,10 @@ package inmemory
 import (
 	"sync"
 	"github.com/MICSTI/imsazon/user"
+	"github.com/MICSTI/imsazon/product"
 )
 
+/* ---------- USER REPOSITORY ---------- */
 type userRepository struct {
 	mtx		sync.RWMutex
 	users	map[user.UserId]*user.User
@@ -71,4 +73,79 @@ func NewUserRepository() user.Repository {
 	r.users[user.U0003] = user.Luke
 
 	return r
+}
+
+/* ---------- PRODUCT REPOSITORY ---------- */
+type productRepository struct {
+	mtx		sync.RWMutex
+	products	map[product.ProductId]*product.Product
+}
+
+func (r *productRepository) Store(p *product.Product) (*product.Product, error) {
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+	r.products[p.Id] = p
+	return p, nil
+}
+
+func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
+	// first check if the product already exists
+	stored, _ := r.Find(p.Id)
+
+	if stored != nil {
+		// product already exists, we only have to update the properties
+		r.mtx.Lock()
+		defer r.mtx.Unlock()
+
+		stored.Name = p.Name
+		stored.Description = p.Description
+		stored.Price = p.Price
+		stored.ImageUrl = p.ImageUrl
+		stored.Quantity += p.Quantity
+
+		return stored, nil
+	} else {
+		// we have to put the product into the store
+		return r.Store(p)
+	}
+}
+
+func (r *productRepository) Withdraw(p *product.Product) (*product.Product, error) {
+	// first check if the product even exists
+	stored, err := r.Find(p.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// check if there are enough items for withdrawing
+
+
+	// update the properties of the stock item
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+
+	stored.Name = p.Name
+	stored.Description = p.Description
+	stored.Price = p.Price
+	stored.ImageUrl = p.ImageUrl
+}
+
+func (r *productRepository) Find(id product.ProductId) (*product.Product, error) {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	if val, ok := r.products[id]; ok {
+		return val, nil
+	}
+	return nil, product.ErrProductUnknown
+}
+
+func (r *productRepository) FindAll() []*product.Product {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	p := make([]*product.Product, 0, len(r.products))
+	for _, val := range r.products {
+		p = append(p, val)
+	}
+	return p
 }

@@ -29,8 +29,8 @@ type addRequest struct {
 }
 
 type addResponse struct {
-	UpdatedProduct		product.Product		`json:"product,omitempty"`
-	Err					error				`json:"error,omitempty"`
+	UpdatedProduct		*product.Product		`json:"product,omitempty"`
+	Err					error					`json:"error,omitempty"`
 }
 
 func (r addResponse) error() error { return r.Err }
@@ -48,8 +48,8 @@ type withdrawRequest struct {
 }
 
 type withdrawResponse struct {
-	UpdatedProduct		product.Product	`json:"product,omitempty"`
-	Err					error			`json:"error,omitempty"`
+	UpdatedProduct		*product.Product	`json:"product,omitempty"`
+	Err					error				`json:"error,omitempty"`
 }
 
 func (r withdrawResponse) error() error { return r.Err }

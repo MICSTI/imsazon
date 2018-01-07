@@ -105,7 +105,7 @@ func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 
 		return stored, nil
 	} else {
-		// we have to put the product into the store
+		// we just have to put the product into the store
 		return r.Store(p)
 	}
 }
@@ -119,7 +119,9 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 	}
 
 	// check if there are enough items for withdrawing
-
+	if stored.Quantity < p.Quantity {
+		return nil, product.ErrNotEnoughItems
+	}
 
 	// update the properties of the stock item
 	r.mtx.Lock()
@@ -129,8 +131,9 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 	stored.Description = p.Description
 	stored.Price = p.Price
 	stored.ImageUrl = p.ImageUrl
+	stored.Quantity -= p.Quantity
 
-	return nil, nil
+	return stored, nil
 }
 
 func (r *productRepository) Find(id product.ProductId) (*product.Product, error) {

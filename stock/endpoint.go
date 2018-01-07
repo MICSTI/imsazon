@@ -11,7 +11,7 @@ type getItemsRequest struct {
 }
 
 type getItemsResponse struct {
-	Products	[]product.Product	`json:"products,omitempty"`
+	Products	[]*product.Product	`json:"products,omitempty"`
 	Err			error				`json:"error,omitempty"`
 }
 
@@ -19,8 +19,8 @@ func (r getItemsResponse) error() error { return r.Err }
 
 func makeGetItemsEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		products, err := s.GetItems()
-		return getItemsResponse{Products: products, Err: err}, nil
+		products := s.GetItems()
+		return getItemsResponse{Products: products, Err: nil}, nil
 	}
 }
 

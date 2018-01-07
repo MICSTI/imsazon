@@ -15,6 +15,7 @@ import (
 	"github.com/MICSTI/imsazon/mail"
 	"github.com/creamdog/gonfig"
 	log2 "log"
+	"github.com/MICSTI/imsazon/stock"
 )
 
 const (
@@ -80,6 +81,7 @@ func main() {
 	// init in-memory repository stores here
 	var (
 		users = inmemory.NewUserRepository()
+		products = inmemory.NewProductRepository()
 	)
 
 	// all services are initialized here
@@ -95,6 +97,10 @@ func main() {
 	ms = mail.NewService(mailServerCredentials)
 	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)
 
+	var sts stock.Service
+	sts = stock.NewService(products)
+	sts = stock.NewLoggingService(log.With(logger, "component", "stock"), sts)
+
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
 
@@ -104,6 +110,7 @@ func main() {
 	mux.Handle("/hello/", hello.MakeHandler(hs, httpLogger))
 	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
 	mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
+	mux.Handle("/stock/", stock.MakeHandler(sts, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

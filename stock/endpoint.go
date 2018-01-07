@@ -29,7 +29,7 @@ type addRequest struct {
 }
 
 type addResponse struct {
-	UpdatedProduct		product.Product	`json:"product,omitempty"`
+	UpdatedProduct		product.Product		`json:"product,omitempty"`
 	Err					error				`json:"error,omitempty"`
 }
 
@@ -43,4 +43,21 @@ func makeAddEndpoint(s Service) endpoint.Endpoint {
 	}
 }
 
-// TODO withdrawRequest, withdrawResponse, makeWithdrawEndpoint
+type withdrawRequest struct {
+	Product		product.Product
+}
+
+type withdrawResponse struct {
+	UpdatedProduct		product.Product	`json:"product,omitempty"`
+	Err					error			`json:"error,omitempty"`
+}
+
+func (r withdrawResponse) error() error { return r.Err }
+
+func makeWithdrawEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(withdrawRequest)
+		updatedProduct, err := s.Withdraw(&req.Product)
+		return withdrawResponse{UpdatedProduct: updatedProduct, Err: err}, nil
+	}
+}

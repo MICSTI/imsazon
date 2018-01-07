@@ -11,9 +11,6 @@ import (
 	"time"
 )
 
-// JWT secret - this should definitely be stored more securely
-var jwtSecret = []byte("0lLXg7jzoM1a9rEx8AXqv0SMFr4OCRaChlNxgmqIxzb6OLWvh6t96oFwrnQHCvVl")
-
 // ErrInvalidArgument is returned when one or more arguments are invalid
 var ErrInvalidArgument = errors.New("Invalid argument")
 
@@ -33,6 +30,7 @@ type Service interface {
 }
 
 type service struct {
+	jwtSecret	string
 	users		user.Repository
 }
 
@@ -64,7 +62,7 @@ func (s *service) Login(username string, password string) (string, error) {
 
 	// create the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, _ := token.SignedString(jwtSecret)
+	signedToken, _ := token.SignedString(s.jwtSecret)
 
 	return signedToken, nil
 }
@@ -75,7 +73,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 	}
 
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+		return s.jwtSecret, nil
 	})
 
 	// for the case we just received a random string
@@ -105,8 +103,9 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 }
 
 // NewService returns a new instance of the auth service
-func NewService(users user.Repository) Service {
+func NewService(jwtSecret string, users user.Repository) Service {
 	return &service{
+		jwtSecret:	jwtSecret,
 		users:		users,
 	}
 }

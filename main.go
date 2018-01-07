@@ -46,6 +46,12 @@ func main() {
 		log2.Fatal("Could not get config from config file")
 	}
 
+	// read JWT secret from config file
+	jwtSecret, err := config.GetString("jwt/secret", "")
+	if err != nil {
+		log2.Fatal("Could not get JWT secret config value")
+	}
+
 	// Mail configuration
 	mailHost, err := config.GetString("mail/host", "")
 	if err != nil {

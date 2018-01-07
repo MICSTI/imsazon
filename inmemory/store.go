@@ -93,17 +93,11 @@ func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 	stored, _ := r.Find(p.Id)
 
 	if stored != nil {
-		// product already exists, we only have to update the properties
-		r.mtx.Lock()
-		defer r.mtx.Unlock()
+		// product already exists, we only have to update the quantity
 
-		stored.Name = p.Name
-		stored.Description = p.Description
-		stored.Price = p.Price
-		stored.ImageUrl = p.ImageUrl
 		stored.Quantity += p.Quantity
 
-		return stored, nil
+		return r.Store(stored)
 	} else {
 		// we just have to put the product into the store
 		return r.Store(p)

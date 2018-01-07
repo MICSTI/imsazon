@@ -49,7 +49,7 @@ func(s *service) Withdraw(productToWithdraw *product.Product) (*product.Product,
 	p, err := s.products.Withdraw(productToWithdraw)
 
 	if err != nil {
-		return &product.Product{}, nil
+		return &product.Product{}, err
 	}
 
 	return p, nil
@@ -58,5 +58,5 @@ func(s *service) Withdraw(productToWithdraw *product.Product) (*product.Product,
 func NewService(products product.Repository) Service {
 	return &service{
 		products: products,
-	}
+		}
 }

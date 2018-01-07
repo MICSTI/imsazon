@@ -100,6 +100,10 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	switch err {
 	case ErrInvalidArgument:
 		w.WriteHeader(http.StatusBadRequest)
+	case product.ErrNotEnoughItems:
+		w.WriteHeader(http.StatusBadRequest)
+	case product.ErrProductUnknown:
+		w.WriteHeader(http.StatusBadRequest)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 	}

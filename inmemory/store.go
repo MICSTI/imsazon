@@ -90,10 +90,12 @@ func (r *productRepository) Store(p *product.Product) (*product.Product, error) 
 
 func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 	// first check if the product already exists
-	stored, _ := r.Find(p.Id)
+	stored, err := r.Find(p.Id)
 
-	if stored != nil {
+	if err == nil {
 		// product already exists, we only have to update the quantity
+		r.mtx.Lock()
+		defer r.mtx.Unlock()
 
 		stored.Quantity += p.Quantity
 

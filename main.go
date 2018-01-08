@@ -16,6 +16,7 @@ import (
 	"github.com/creamdog/gonfig"
 	log2 "log"
 	"github.com/MICSTI/imsazon/stock"
+	"github.com/MICSTI/imsazon/payment"
 )
 
 const (
@@ -110,6 +111,10 @@ func main() {
 	sts = stock.NewService(products)
 	sts = stock.NewLoggingService(log.With(logger, "component", "stock"), sts)
 
+	var ps payment.Service
+	ps = payment.NewService()
+	ps = payment.NewLoggingService(log.With(logger, "component", "payment"), ps)
+
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
 
@@ -120,6 +125,7 @@ func main() {
 	mux.Handle("/auth/", auth.MakeHandler(as, httpLogger))
 	mux.Handle("/mail/", mail.MakeHandler(ms, httpLogger))
 	mux.Handle("/stock/", stock.MakeHandler(sts, httpLogger))
+	mux.Handle("/payment/", payment.MakeHandler(ps, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

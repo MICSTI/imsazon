@@ -177,6 +177,6 @@ func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId)
 
 func NewCartRepository() cart.Repository {
 	return &cartRepository{
-		carts: make(map[user.UserId][]*product.SimpleProduct)
+		carts: make(map[user.UserId][]*product.SimpleProduct),
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"github.com/MICSTI/imsazon/models/user"
 	"github.com/MICSTI/imsazon/models/product"
+	"github.com/MICSTI/imsazon/models/cart"
 )
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
@@ -25,4 +26,5 @@ type Service interface {
 type service struct {
 	users			user.Repository
 	products		product.Repository
+	carts			cart.Repository
 }

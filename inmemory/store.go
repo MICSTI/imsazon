@@ -8,7 +8,7 @@ import (
 	"sync"
 	"github.com/MICSTI/imsazon/models/user"
 	"github.com/MICSTI/imsazon/models/product"
-	"github.com/MICSTI/imsazon/cart"
+	"github.com/MICSTI/imsazon/models/cart"
 )
 
 /* ---------- USER REPOSITORY ---------- */
@@ -168,9 +168,15 @@ type cartRepository struct {
 }
 
 func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
-
+	return nil, nil
 }
 
 func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error) {
+	return nil, nil
+}
 
+func NewCartRepository() cart.Repository {
+	return &cartRepository{
+		carts: make(map[user.UserId][]*product.SimpleProduct)
+	}
 }

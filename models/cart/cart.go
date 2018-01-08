@@ -11,5 +11,5 @@ type Repository interface {
 	Put(user.UserId, product.ProductId, int) ([]*product.SimpleProduct, error)
 
 	// deletes an item from the user's cart
-	Remove(id user.UserId, productId product.ProductId) error
+	Remove(id user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error)
 }

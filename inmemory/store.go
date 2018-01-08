@@ -8,6 +8,7 @@ import (
 	"sync"
 	"github.com/MICSTI/imsazon/models/user"
 	"github.com/MICSTI/imsazon/models/product"
+	"github.com/MICSTI/imsazon/cart"
 )
 
 /* ---------- USER REPOSITORY ---------- */
@@ -158,4 +159,18 @@ func NewProductRepository() product.Repository {
 	r.products[product.P0005] = product.CarboniteFreezer
 
 	return r
+}
+
+/* ---------- CART REPOSITORY ---------- */
+type cartRepository struct {
+	mtx			sync.RWMutex
+	carts		map[user.UserId][]*product.SimpleProduct
+}
+
+func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
+
+}
+
+func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error) {
+
 }

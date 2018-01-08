@@ -15,14 +15,11 @@ var ErrInvalidArgument = errors.New("Invalid argument")
 
 // Service is the interface that provides the cart methods
 type Service interface {
-	// Add adds an item to a user's cart
-	Add(userId user.UserId, productId product.ProductId, quantity int) error
+	// Put adds an item to a user's cart - if it already exists it will be updated
+	Put(userId user.UserId, productId product.ProductId, quantity int) error
 
-	// Update updates the quantity of an item in a user's cart
-	Update(id user.UserId, productId product.ProductId, quantity int) error
-
-	// Delete deletes an item from the user's cart
-	Delete(id user.UserId, productId product.ProductId)
+	// Remove deletes an item from the user's cart
+	Remove(id user.UserId, productId product.ProductId) error
 }
 
 type service struct {

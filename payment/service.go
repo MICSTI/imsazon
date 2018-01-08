@@ -75,6 +75,10 @@ func (s *service) Charge(charge CreditCardCharge) (status CreditCardChargeStatus
 	// in 80% of the cases we return a success status, in the other 20% an error
 	success := randNumber.Float64() < 0.8
 
+	// add a fake delay to make it more realistic
+	duration := time.Second
+	time.Sleep(duration)
+
 	if success {
 		return Success, nil
 	} else {

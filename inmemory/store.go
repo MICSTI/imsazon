@@ -167,7 +167,47 @@ type cartRepository struct {
 	carts		map[user.UserId][]*product.SimpleProduct
 }
 
+// gets a user's cart by user id
+func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct) {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	if val, ok := r.carts[id]; ok {
+		return val
+	}
+	// no cart found, so we create one
+	return []*product.SimpleProduct{}
+}
+
+func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, productToFind *product.SimpleProduct) *product.SimpleProduct {
+	r.mtx.RLock()
+	defer r.mtx.Unlock()
+	for _, val := range userCart {
+		if val.Id == productToFind.Id {
+			return val
+		}
+	}
+	return nil
+}
+
 func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
+	// first create a SimpleProduct out of the parameters
+	sp := product.NewSimpleProduct(
+		productId,
+		quantity,
+	)
+
+	// get the user's cart
+	userCart := r.FindUserCart(userId)
+
+	// try to find the item in the user's cart
+	itemInCart := r.FindItemInCart(userCart, sp)
+
+	if itemInCart == nil {
+		// item does not exist yet - we  have to append it to the array
+	} else {
+		// item does already exist - we have to update the properties
+	}
+
 	return nil, nil
 }
 

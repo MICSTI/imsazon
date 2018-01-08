@@ -14,7 +14,10 @@ type chargeRequest struct {
 
 type chargeResponse struct {
 	Id					string						`json:"transactionId"`
-	Status				CreditCardChargeStatus		`json:"status"`
+	CardNumber			string						`json:"creditCard"`
+	Amount				float32						`json:"amount"`
+	Currency			string						`json:"currency"`
+	Status				string						`json:"status"`
 	Err					error						`json:"error,omitempty"`
 }
 
@@ -35,7 +38,10 @@ func makeChargeEndpoint(s Service) endpoint.Endpoint {
 
 		return chargeResponse{
 			Id:				req.Id,
-			Status:			status,
+			CardNumber:		req.CardNumber,
+			Amount:			req.Amount,
+			Currency:		req.Currency,
+			Status:			status.String(),
 			Err:			err,
 		}, nil
 	}

@@ -17,6 +17,11 @@ import (
 // ErrInvalidArgument is returned when one or more arguments are invalid.
 var ErrInvalidArgument = errors.New("Invalid argument")
 
+var ErrCard = errors.New(CardError.String())
+var ErrValidation = errors.New(ValidationError.String())
+var ErrNetwork = errors.New(NetworkError.String())
+var ErrOther = errors.New(OtherError.String())
+
 type CreditCardCharge struct {
 	Id					string
 	CardNumber			string

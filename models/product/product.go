@@ -33,6 +33,18 @@ func New(id ProductId, name string, description string, category string, imageUr
 	}
 }
 
+type SimpleProduct struct {
+	Id				ProductId
+	Quantity		int
+}
+
+func NewSimpleProduct(id ProductId, quantity int) *SimpleProduct {
+	return &SimpleProduct{
+		Id:			id,
+		Quantity:	quantity,
+	}
+}
+
 // Repository interface provides access to an in-memory product store
 type Repository interface {
 	// directly stores a product in the store

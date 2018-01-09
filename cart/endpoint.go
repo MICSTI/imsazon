@@ -23,7 +23,7 @@ func makeGetCartEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getCartRequest)
 		cartItems, err := s.GetCart(req.UserId)
-		return getCartResponse{CartItems: cartItems, Err: err}, nil
+		return getCartResponse{UserId: req.UserId, CartItems: cartItems, Err: err}, nil
 	}
 }
 
@@ -45,7 +45,7 @@ func makePutItemEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(putItemRequest)
 		updatedCart, err := s.Put(req.UserId, req.ProductId, req.Quantity)
-		return putItemResponse{CartItems: updatedCart, Err: err}, nil
+		return putItemResponse{UserId: req.UserId, CartItems: updatedCart, Err: err}, nil
 	}
 }
 
@@ -66,6 +66,6 @@ func makeRemoveItemEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(removeItemRequest)
 		updatedCart, err := s.Remove(req.UserId, req.ProductId)
-		return removeItemResponse{CartItems: updatedCart, Err: err}, nil
+		return removeItemResponse{UserId: req.UserId, CartItems: updatedCart, Err: err}, nil
 	}
 }

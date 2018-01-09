@@ -178,15 +178,15 @@ func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct)
 	return []*product.SimpleProduct{}
 }
 
-func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, productToFind *product.SimpleProduct) *product.SimpleProduct {
+func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, productToFind *product.SimpleProduct) (int, *product.SimpleProduct) {
 	r.mtx.RLock()
-	defer r.mtx.Unlock()
-	for _, val := range userCart {
+	defer r.mtx.RUnlock()
+	for idx, val := range userCart {
 		if val.Id == productToFind.Id {
-			return val
+			return idx, val
 		}
 	}
-	return nil
+	return -1, nil
 }
 
 func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
@@ -200,19 +200,43 @@ func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, qu
 	userCart := r.FindUserCart(userId)
 
 	// try to find the item in the user's cart
-	itemInCart := r.FindItemInCart(userCart, sp)
+	_, itemInCart := r.FindItemInCart(userCart, sp)
 
 	if itemInCart == nil {
 		// item does not exist yet - we  have to append it to the array
+		updatedCart := append(userCart, sp)
+		return updatedCart, nil
 	} else {
 		// item does already exist - we have to update the properties
+		r.mtx.Lock()
+		defer r.mtx.Unlock()
+		itemInCart.Quantity = sp.Quantity
+		return userCart, nil
 	}
-
-	return nil, nil
 }
 
 func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error) {
-	return nil, nil
+	// first create a SimpleProduct out of the parameters
+	sp := product.NewSimpleProduct(
+		productId,
+		0,		// the quantity does not matter in this case
+	)
+
+	// get the user's cart
+	userCart := r.FindUserCart(userId)
+
+	// try to find the item in the user's cart
+	idx, _ := r.FindItemInCart(userCart, sp)
+
+	if idx >= 0 {
+		// deletes the item on the position idx from the slice
+		r.mtx.Lock()
+		defer r.mtx.Unlock()
+		userCart = append(userCart[:idx], userCart[idx + 1:]...)
+	}
+
+	// in case the item was not found we just don't do anything
+	return userCart, nil
 }
 
 func NewCartRepository() cart.Repository {

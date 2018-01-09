@@ -73,16 +73,22 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	switch err {
 	case ErrInvalidArgument:
 		w.WriteHeader(http.StatusBadRequest)
+		break
 	case ErrCard:
 		w.WriteHeader(http.StatusBadRequest)
+		break
 	case ErrValidation:
 		w.WriteHeader(http.StatusBadRequest)
+		break
 	case ErrNetwork:
 		w.WriteHeader(http.StatusInternalServerError)
+		break
 	case ErrOther:
 		w.WriteHeader(http.StatusBadRequest)
+		break
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
+		break
 	}
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"error": err.Error(),

@@ -82,7 +82,7 @@ func (s *service) Charge(charge CreditCardCharge) (status CreditCardChargeStatus
 	if success {
 		return Success, nil
 	} else {
-		return CardError, errors.New(CardError.String())
+		return CardError, ErrCard
 	}
 }
 

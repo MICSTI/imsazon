@@ -224,7 +224,7 @@ func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, qu
 		r.mtx.Lock()
 		defer r.mtx.Unlock()
 		updatedCart := append(userCart, sp)
-		return updatedCart, nil
+		return r.StoreUserCart(userId, updatedCart), nil
 	} else {
 		// item does already exist - we have to update the properties
 		r.mtx.Lock()

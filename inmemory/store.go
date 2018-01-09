@@ -261,3 +261,5 @@ func NewCartRepository() cart.Repository {
 		carts: make(map[user.UserId][]*product.SimpleProduct),
 	}
 }
+
+/* ---------- ORDER REPOSITORY ---------- */

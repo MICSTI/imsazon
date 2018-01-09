@@ -5,6 +5,7 @@ import (
 	"errors"
 	"math/rand"
 	"time"
+	"github.com/MICSTI/imsazon/models/user"
 )
 
 // OrderId uniquely identifies an order
@@ -47,13 +48,16 @@ func (s OrderStatus) String() string {
 
 type Order struct {
 	Id			OrderId
+	UserId		user.UserId
 	Status		OrderStatus
 	Items		[]*product.SimpleProduct
 }
 
-func New(id OrderId, items []*product.SimpleProduct) *Order {
+func New(id OrderId, userId user.UserId, items []*product.SimpleProduct) *Order {
 	return &Order{
 		Id:			id,
+		UserId:		userId,
+		Status:		Created,
 		Items:		items,
 	}
 }
@@ -64,6 +68,7 @@ type Repository interface {
 	UpdateStatus(id OrderId, newStatus OrderStatus) error
 	Find(id OrderId) (*Order, error)
 	FindAll() []*Order
+	FindAllForUser(userId user.UserId) []*Order
 }
 
 // ErrUnknown is used when an ordercould not be found.

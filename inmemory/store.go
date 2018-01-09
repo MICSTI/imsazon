@@ -167,6 +167,13 @@ type cartRepository struct {
 	carts		map[user.UserId][]*product.SimpleProduct
 }
 
+func (r *cartRepository) StoreUserCart(id user.UserId, cartItems []*product.SimpleProduct) []*product.SimpleProduct {
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+	r.carts[id] = cartItems
+	return cartItems
+}
+
 // gets a user's cart by user id
 func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct) {
 	r.mtx.RLock()
@@ -174,13 +181,7 @@ func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct)
 	if val, ok := r.carts[id]; ok {
 		return val
 	} else {
-		// no cart found, so we create one
-		r.mtx.RUnlock()
-		r.mtx.Lock()
-		defer r.mtx.Unlock()
-		newCart := []*product.SimpleProduct{}
-		r.carts[id] = newCart
-		return r.carts[id]
+		return nil
 	}
 }
 
@@ -196,7 +197,13 @@ func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, produ
 }
 
 func (r *cartRepository) GetCart(id user.UserId) ([]*product.SimpleProduct, error) {
-	return r.FindUserCart(id), nil
+	userCart := r.FindUserCart(id)
+
+	if userCart != nil {
+		return userCart, nil
+	} else {
+		return r.StoreUserCart(id, []*product.SimpleProduct{}), nil
+	}
 }
 
 func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {

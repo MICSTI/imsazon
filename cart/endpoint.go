@@ -7,6 +7,26 @@ import (
 	"context"
 )
 
+type getCartRequest struct {
+	UserId			user.UserId
+}
+
+type getCartResponse struct {
+	UserId			user.UserId						`json:"userId,omitempty"`
+	CartItems		[]*product.SimpleProduct		`json:"items"`
+	Err				error							`json:"error,omitempty"`
+}
+
+func (r getCartResponse) error() error { return r.Err }
+
+func makeGetCartEndpoint(s Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(getCartRequest)
+		cartItems, err := s.GetCart(req.UserId)
+		return getCartResponse{CartItems: cartItems, Err: err}, nil
+	}
+}
+
 type putItemRequest struct {
 	UserId			user.UserId
 	ProductId		product.ProductId

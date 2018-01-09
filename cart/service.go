@@ -16,6 +16,9 @@ var ErrInvalidArgument = errors.New("Invalid argument")
 
 // Service is the interface that provides the cart methods
 type Service interface {
+	// GetCart returns the cart for a user
+	GetCart(userId user.UserId) ([]*product.SimpleProduct, error)
+
 	// Put adds an item to a user's cart - if it already exists it will be updated
 	Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error)
 
@@ -25,6 +28,14 @@ type Service interface {
 
 type service struct {
 	carts			cart.Repository
+}
+
+func (s *service) GetCart(userId user.UserId) ([]*product.SimpleProduct, error) {
+	if userId == "" {
+		return []*product.SimpleProduct{}, ErrInvalidArgument
+	}
+
+
 }
 
 func (s *service) Put(userId user.UserId, productId product.ProductId, quantity int) (updatedCart []*product.SimpleProduct, err error) {

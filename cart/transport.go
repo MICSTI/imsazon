@@ -18,6 +18,13 @@ func MakeHandler(cs Service, logger kitlog.Logger) http.Handler {
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
+	getCartHandler := kithttp.NewServer(
+		makeGetCartEndpoint(cs),
+		decodeGetCartRequest,
+		encodeResponse,
+		opts...,
+	)
+
 	putItemHandler := kithttp.NewServer(
 		makePutItemEndpoint(cs),
 		decodePutItemRequest,
@@ -34,10 +41,25 @@ func MakeHandler(cs Service, logger kitlog.Logger) http.Handler {
 
 	r := mux.NewRouter()
 
+	r.Handle("/cart/get", getCartHandler).Methods("POST")
 	r.Handle("/cart/put", putItemHandler).Methods("POST")
 	r.Handle("/cart/remove", removeItemHandler).Methods("POST")
 
 	return r
+}
+
+func decodeGetCartRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var body struct {
+		UserId			user.UserId			`json:"userId"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		return nil, err
+	}
+
+	return getCartRequest{
+		UserId:			body.UserId,
+	}, nil
 }
 
 func decodePutItemRequest(_ context.Context, r *http.Request) (interface{}, error) {

@@ -9,6 +9,7 @@ import (
 	"github.com/MICSTI/imsazon/models/user"
 	"github.com/MICSTI/imsazon/models/product"
 	"github.com/MICSTI/imsazon/models/cart"
+	"github.com/MICSTI/imsazon/models/order"
 )
 
 /* ---------- USER REPOSITORY ---------- */
@@ -265,4 +266,44 @@ func NewCartRepository() cart.Repository {
 /* ---------- ORDER REPOSITORY ---------- */
 type orderRepository struct {
 	mtx			sync.RWMutex
+	orders		map[order.OrderId]*order.Order
+}
+
+func (r *orderRepository) Create(o *order.Order) error {
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+	r.orders[o.Id] = o
+	return nil
+}
+
+func (r *orderRepository) UpdateStatus(id order.OrderId, newStatus order.OrderStatus) error {
+	o, err := r.Find(id)
+
+	if err != nil {
+		return err
+	}
+
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+	o.Status = newStatus
+	return nil
+}
+
+func (r *orderRepository) Find(id order.OrderId) (*order.Order, error) {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	if val, ok := r.orders[id]; ok {
+		return val, nil
+	}
+	return nil, order.ErrUnknown
+}
+
+func (r *orderRepository) FindAll() []*order.Order {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	o := make([]*order.Order, 0, len(r.orders))
+	for _, val := range r.orders {
+		o = append(o, val)
+	}
+	return o
 }

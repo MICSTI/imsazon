@@ -4,8 +4,8 @@ import "github.com/MICSTI/imsazon/models/product"
 
 // Sample OrderIds
 var (
-	O0001 OrderId = "zdsklde4d"
-	O0002 OrderId = "etd4cs5d3"
+	O0001 OrderId = getRandomOrderId()
+	O0002 OrderId = getRandomOrderId()
 )
 
 // sample orders

@@ -47,6 +47,7 @@ func (s OrderStatus) String() string {
 
 type Order struct {
 	Id			OrderId
+	Status		OrderStatus
 	Items		[]*product.SimpleProduct
 }
 

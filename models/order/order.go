@@ -102,6 +102,6 @@ func RandStringBytesMaskImprSrc(n int) string {
 	return string(b)
 }
 
-func getRandomOrderId() OrderId {
+func GetRandomOrderId() OrderId {
 	return OrderId(RandStringBytesMaskImprSrc(8))
 }

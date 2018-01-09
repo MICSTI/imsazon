@@ -221,8 +221,6 @@ func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, qu
 
 	if idx < 0 {
 		// item does not exist yet - we have to append it to the array
-		r.mtx.Lock()
-		defer r.mtx.Unlock()
 		updatedCart := append(userCart, sp)
 		return r.StoreUserCart(userId, updatedCart), nil
 	} else {

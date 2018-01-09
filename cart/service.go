@@ -35,7 +35,7 @@ func (s *service) GetCart(userId user.UserId) ([]*product.SimpleProduct, error) 
 		return []*product.SimpleProduct{}, ErrInvalidArgument
 	}
 
-
+	return s.carts.GetCart(userId)
 }
 
 func (s *service) Put(userId user.UserId, productId product.ProductId, quantity int) (updatedCart []*product.SimpleProduct, err error) {

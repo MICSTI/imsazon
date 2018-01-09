@@ -189,6 +189,10 @@ func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, produ
 	return -1, nil
 }
 
+func (r *cartRepository) GetCart(id user.UserId) ([]*product.SimpleProduct, error) {
+	return r.FindUserCart(id), nil
+}
+
 func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
 	// first create a SimpleProduct out of the parameters
 	sp := product.NewSimpleProduct(

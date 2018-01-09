@@ -307,3 +307,21 @@ func (r *orderRepository) FindAll() []*order.Order {
 	}
 	return o
 }
+
+func (r *orderRepository) FindAllForUser(userId user.UserId) []*order.Order {
+	r.mtx.RLock()
+	defer r.mtx.RUnlock()
+	o := []*order.Order{}
+	for _, val := range r.orders {
+		if userId == val.UserId {
+			o = append(o, val)
+		}
+	}
+	return o
+}
+
+func NewOrderRepository() order.Repository {
+	return &orderRepository{
+		orders: make(map[order.OrderId]*order.Order),
+	}
+}

@@ -263,3 +263,6 @@ func NewCartRepository() cart.Repository {
 }
 
 /* ---------- ORDER REPOSITORY ---------- */
+type orderRepository struct {
+	mtx			sync.RWMutex
+}

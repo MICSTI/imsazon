@@ -17,14 +17,35 @@ var ErrInvalidArgument = errors.New("Invalid argument")
 // Service is the interface that provides the cart methods
 type Service interface {
 	// Put adds an item to a user's cart - if it already exists it will be updated
-	Put(userId user.UserId, productId product.ProductId, quantity int) error
+	Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error)
 
 	// Remove deletes an item from the user's cart
-	Remove(id user.UserId, productId product.ProductId) error
+	Remove(userId user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error)
 }
 
 type service struct {
-	users			user.Repository
-	products		product.Repository
 	carts			cart.Repository
+}
+
+func (s *service) Put(userId user.UserId, productId product.ProductId, quantity int) (updatedCart []*product.SimpleProduct, err error) {
+	if (userId == "" || productId == "" || quantity < 0) {
+		return []*product.SimpleProduct{}, ErrInvalidArgument
+	}
+
+	return s.carts.Put(userId, productId, quantity)
+}
+
+func (s *service) Remove(userId user.UserId, productId product.ProductId) (updatedCart []*product.SimpleProduct, err error) {
+	if (userId == "" || productId == "") {
+		return []*product.SimpleProduct{}, ErrInvalidArgument
+	}
+
+	return s.carts.Remove(userId, productId)
+}
+
+// NewService creates a cart service with the necessary dependencies
+func NewService(carts cart.Repository) Service {
+	return &service{
+		carts:		carts,
+	}
 }

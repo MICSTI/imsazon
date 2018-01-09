@@ -26,7 +26,7 @@ func (s *loggingService) GetCart(userId user.UserId) (cartItems []*product.Simpl
 			"err", err,
 		)
 	}(time.Now())
-	return s.GetCart(userId)
+	return s.Service.GetCart(userId)
 }
 
 func (s *loggingService) Put(userId user.UserId, productId product.ProductId, quantity int) (updatedCart []*product.SimpleProduct, err error) {

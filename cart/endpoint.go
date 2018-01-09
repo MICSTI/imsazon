@@ -14,8 +14,9 @@ type putItemRequest struct {
 }
 
 type putItemResponse struct {
-	CartItems		[]*product.SimpleProduct
-	Err				error
+	UserId			user.UserId						`json:"userId,omitempty"`
+	CartItems		[]*product.SimpleProduct		`json:"items"`
+	Err				error							`json:"error,omitempty"`
 }
 
 func (r putItemResponse) error() error { return r.Err }
@@ -34,8 +35,9 @@ type removeItemRequest struct {
 }
 
 type removeItemResponse struct {
-	CartItems		[]*product.SimpleProduct
-	Err				error
+	UserId			user.UserId						`json:"userId,omitempty"`
+	CartItems		[]*product.SimpleProduct		`json:"items"`
+	Err				error							`json:"error,omitempty"`
 }
 
 func (r removeItemResponse) error() error { return r.Err }

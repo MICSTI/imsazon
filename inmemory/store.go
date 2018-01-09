@@ -173,9 +173,15 @@ func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct)
 	defer r.mtx.RUnlock()
 	if val, ok := r.carts[id]; ok {
 		return val
+	} else {
+		// no cart found, so we create one
+		r.mtx.RUnlock()
+		r.mtx.Lock()
+		defer r.mtx.Unlock()
+		newCart := []*product.SimpleProduct{}
+		r.carts[id] = newCart
+		return r.carts[id]
 	}
-	// no cart found, so we create one
-	return []*product.SimpleProduct{}
 }
 
 func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, productToFind *product.SimpleProduct) (int, *product.SimpleProduct) {

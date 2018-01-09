@@ -269,24 +269,24 @@ type orderRepository struct {
 	orders		map[order.OrderId]*order.Order
 }
 
-func (r *orderRepository) Create(o *order.Order) error {
+func (r *orderRepository) Create(o *order.Order) (order *order.Order, err error) {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	r.orders[o.Id] = o
-	return nil
+	return o, nil
 }
 
-func (r *orderRepository) UpdateStatus(id order.OrderId, newStatus order.OrderStatus) error {
+func (r *orderRepository) UpdateStatus(id order.OrderId, newStatus order.OrderStatus) (order *order.Order, err error) {
 	o, err := r.Find(id)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	o.Status = newStatus
-	return nil
+	return o, nil
 }
 
 func (r *orderRepository) Find(id order.OrderId) (*order.Order, error) {

@@ -64,8 +64,8 @@ func New(id OrderId, userId user.UserId, items []*product.SimpleProduct) *Order 
 
 // Repository provides access to an order store
 type Repository interface {
-	Create(order *Order) error
-	UpdateStatus(id OrderId, newStatus OrderStatus) error
+	Create(order *Order) (*Order, error)
+	UpdateStatus(id OrderId, newStatus OrderStatus) (*Order, error)
 	Find(id OrderId) (*Order, error)
 	FindAll() []*Order
 	FindAllForUser(userId user.UserId) []*Order

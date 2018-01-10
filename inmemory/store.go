@@ -6,20 +6,20 @@ package inmemory
 
 import (
 	"sync"
-	"github.com/MICSTI/imsazon/models/user"
-	"github.com/MICSTI/imsazon/models/product"
-	"github.com/MICSTI/imsazon/models/cart"
-	"github.com/MICSTI/imsazon/models/order"
+	userModel "github.com/MICSTI/imsazon/models/user"
+	productModel "github.com/MICSTI/imsazon/models/product"
+	cartModel "github.com/MICSTI/imsazon/models/cart"
+	orderModel "github.com/MICSTI/imsazon/models/order"
 )
 
 /* ---------- USER REPOSITORY ---------- */
 type userRepository struct {
 	mtx		sync.RWMutex
-	users	map[user.UserId]*user.User
+	users	map[userModel.UserId]*userModel.User
 }
 
 // adds a user to the repository store
-func (r *userRepository) Add(u *user.User) error {
+func (r *userRepository) Add(u *userModel.User) error {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	r.users[u.Id] = u
@@ -27,20 +27,20 @@ func (r *userRepository) Add(u *user.User) error {
 }
 
 // attempts to find the user by UserId inside the repository store
-func (r *userRepository) Find(id user.UserId) (*user.User, error) {
+func (r *userRepository) Find(id userModel.UserId) (*userModel.User, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	if val, ok := r.users[id]; ok {
 		return val, nil
 	}
-	return nil, user.ErrUnknown
+	return nil, userModel.ErrUnknown
 }
 
 // returns alls users in an array
-func (r *userRepository) FindAll() []*user.User {
+func (r *userRepository) FindAll() []*userModel.User {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
-	u := make([]*user.User, 0, len(r.users))
+	u := make([]*userModel.User, 0, len(r.users))
 	for _, val := range r.users {
 		u = append(u, val)
 	}
@@ -48,7 +48,7 @@ func (r *userRepository) FindAll() []*user.User {
 }
 
 // checks the login credentials of a user
-func (r *userRepository) CheckLogin(username string, password string) (*user.User, error) {
+func (r *userRepository) CheckLogin(username string, password string) (*userModel.User, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	for _, val := range r.users {
@@ -61,18 +61,18 @@ func (r *userRepository) CheckLogin(username string, password string) (*user.Use
 			return val, nil
 		}
 	}
-	return nil, user.ErrUnknown
+	return nil, userModel.ErrUnknown
 }
 
 // returns an instance of a user repository
-func NewUserRepository() user.Repository {
+func NewUserRepository() userModel.Repository {
 	r := &userRepository{
-		users: make(map[user.UserId]*user.User),
+		users: make(map[userModel.UserId]*userModel.User),
 	}
 
-	r.users[user.U0001] = user.Rey
-	r.users[user.U0002] = user.Kylo
-	r.users[user.U0003] = user.Luke
+	r.users[userModel.U0001] = userModel.Rey
+	r.users[userModel.U0002] = userModel.Kylo
+	r.users[userModel.U0003] = userModel.Luke
 
 	return r
 }
@@ -80,17 +80,17 @@ func NewUserRepository() user.Repository {
 /* ---------- PRODUCT REPOSITORY ---------- */
 type productRepository struct {
 	mtx		sync.RWMutex
-	products	map[product.ProductId]*product.Product
+	products	map[productModel.ProductId]*productModel.Product
 }
 
-func (r *productRepository) Store(p *product.Product) (*product.Product, error) {
+func (r *productRepository) Store(p *productModel.Product) (*productModel.Product, error) {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	r.products[p.Id] = p
 	return p, nil
 }
 
-func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
+func (r *productRepository) Add(p *productModel.Product) (*productModel.Product, error) {
 	// first check if the product even exists
 	stored, err := r.Find(p.Id)
 
@@ -107,7 +107,7 @@ func (r *productRepository) Add(p *product.Product) (*product.Product, error) {
 	return stored, nil
 }
 
-func (r *productRepository) Withdraw(p *product.Product) (*product.Product, error) {
+func (r *productRepository) Withdraw(p *productModel.Product) (*productModel.Product, error) {
 	// first check if the product even exists
 	stored, err := r.Find(p.Id)
 
@@ -117,7 +117,7 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 
 	// check if there are enough items for withdrawing
 	if stored.Quantity < p.Quantity {
-		return nil, product.ErrNotEnoughItems
+		return nil, productModel.ErrNotEnoughItems
 	}
 
 	// update the properties of the stock item
@@ -129,35 +129,35 @@ func (r *productRepository) Withdraw(p *product.Product) (*product.Product, erro
 	return stored, nil
 }
 
-func (r *productRepository) Find(id product.ProductId) (*product.Product, error) {
+func (r *productRepository) Find(id productModel.ProductId) (*productModel.Product, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	if val, ok := r.products[id]; ok {
 		return val, nil
 	}
-	return nil, product.ErrProductUnknown
+	return nil, productModel.ErrProductUnknown
 }
 
-func (r *productRepository) FindAll() []*product.Product {
+func (r *productRepository) FindAll() []*productModel.Product {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
-	p := make([]*product.Product, 0, len(r.products))
+	p := make([]*productModel.Product, 0, len(r.products))
 	for _, val := range r.products {
 		p = append(p, val)
 	}
 	return p
 }
 
-func NewProductRepository() product.Repository {
+func NewProductRepository() productModel.Repository {
 	r := &productRepository{
-		products: make(map[product.ProductId]*product.Product),
+		products: make(map[productModel.ProductId]*productModel.Product),
 	}
 
-	r.products[product.P0001] = product.Lightsaber
-	r.products[product.P0002] = product.MilleniumFalcon
-	r.products[product.P0003] = product.BB8
-	r.products[product.P0004] = product.Podracer
-	r.products[product.P0005] = product.CarboniteFreezer
+	r.products[productModel.P0001] = productModel.Lightsaber
+	r.products[productModel.P0002] = productModel.MilleniumFalcon
+	r.products[productModel.P0003] = productModel.BB8
+	r.products[productModel.P0004] = productModel.Podracer
+	r.products[productModel.P0005] = productModel.CarboniteFreezer
 
 	return r
 }
@@ -165,10 +165,10 @@ func NewProductRepository() product.Repository {
 /* ---------- CART REPOSITORY ---------- */
 type cartRepository struct {
 	mtx			sync.RWMutex
-	carts		map[user.UserId][]*product.SimpleProduct
+	carts		map[userModel.UserId][]*productModel.SimpleProduct
 }
 
-func (r *cartRepository) StoreUserCart(id user.UserId, cartItems []*product.SimpleProduct) []*product.SimpleProduct {
+func (r *cartRepository) StoreUserCart(id userModel.UserId, cartItems []*productModel.SimpleProduct) []*productModel.SimpleProduct {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	r.carts[id] = cartItems
@@ -176,7 +176,7 @@ func (r *cartRepository) StoreUserCart(id user.UserId, cartItems []*product.Simp
 }
 
 // gets a user's cart by user id
-func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct) {
+func (r *cartRepository) FindUserCart(id userModel.UserId) ([]*productModel.SimpleProduct) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	if val, ok := r.carts[id]; ok {
@@ -186,7 +186,7 @@ func (r *cartRepository) FindUserCart(id user.UserId) ([]*product.SimpleProduct)
 	}
 }
 
-func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, productToFind *product.SimpleProduct) (int, *product.SimpleProduct) {
+func (r *cartRepository) FindItemInCart(userCart []*productModel.SimpleProduct, productToFind *productModel.SimpleProduct) (int, *productModel.SimpleProduct) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	for idx, val := range userCart {
@@ -197,19 +197,19 @@ func (r *cartRepository) FindItemInCart(userCart []*product.SimpleProduct, produ
 	return -1, nil
 }
 
-func (r *cartRepository) GetCart(id user.UserId) ([]*product.SimpleProduct, error) {
+func (r *cartRepository) GetCart(id userModel.UserId) ([]*productModel.SimpleProduct, error) {
 	userCart := r.FindUserCart(id)
 
 	if userCart != nil {
 		return userCart, nil
 	} else {
-		return r.StoreUserCart(id, []*product.SimpleProduct{}), nil
+		return r.StoreUserCart(id, []*productModel.SimpleProduct{}), nil
 	}
 }
 
-func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, quantity int) ([]*product.SimpleProduct, error) {
+func (r *cartRepository) Put(userId userModel.UserId, productId productModel.ProductId, quantity int) ([]*productModel.SimpleProduct, error) {
 	// first create a SimpleProduct out of the parameters
-	sp := product.NewSimpleProduct(
+	sp := productModel.NewSimpleProduct(
 		productId,
 		quantity,
 	)
@@ -233,9 +233,9 @@ func (r *cartRepository) Put(userId user.UserId, productId product.ProductId, qu
 	}
 }
 
-func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId) ([]*product.SimpleProduct, error) {
+func (r *cartRepository) Remove(userId userModel.UserId, productId productModel.ProductId) ([]*productModel.SimpleProduct, error) {
 	// first create a SimpleProduct out of the parameters
-	sp := product.NewSimpleProduct(
+	sp := productModel.NewSimpleProduct(
 		productId,
 		0,		// the quantity does not matter in this case
 	)
@@ -257,26 +257,26 @@ func (r *cartRepository) Remove(userId user.UserId, productId product.ProductId)
 	return userCart, nil
 }
 
-func NewCartRepository() cart.Repository {
+func NewCartRepository() cartModel.Repository {
 	return &cartRepository{
-		carts: make(map[user.UserId][]*product.SimpleProduct),
+		carts: make(map[userModel.UserId][]*productModel.SimpleProduct),
 	}
 }
 
 /* ---------- ORDER REPOSITORY ---------- */
 type orderRepository struct {
 	mtx			sync.RWMutex
-	orders		map[order.OrderId]*order.Order
+	orders		map[orderModel.OrderId]*orderModel.Order
 }
 
-func (r *orderRepository) Create(o *order.Order) (order *order.Order, err error) {
+func (r *orderRepository) Create(o *orderModel.Order) (order *orderModel.Order, err error) {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 	r.orders[o.Id] = o
 	return o, nil
 }
 
-func (r *orderRepository) UpdateStatus(id order.OrderId, newStatus order.OrderStatus) (order *order.Order, err error) {
+func (r *orderRepository) UpdateStatus(id orderModel.OrderId, newStatus orderModel.OrderStatus) (order *orderModel.Order, err error) {
 	o, err := r.Find(id)
 
 	if err != nil {
@@ -289,29 +289,29 @@ func (r *orderRepository) UpdateStatus(id order.OrderId, newStatus order.OrderSt
 	return o, nil
 }
 
-func (r *orderRepository) Find(id order.OrderId) (*order.Order, error) {
+func (r *orderRepository) Find(id orderModel.OrderId) (*orderModel.Order, error) {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
 	if val, ok := r.orders[id]; ok {
 		return val, nil
 	}
-	return nil, order.ErrUnknown
+	return nil, orderModel.ErrUnknown
 }
 
-func (r *orderRepository) FindAll() []*order.Order {
+func (r *orderRepository) FindAll() []*orderModel.Order {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
-	o := make([]*order.Order, 0, len(r.orders))
+	o := make([]*orderModel.Order, 0, len(r.orders))
 	for _, val := range r.orders {
 		o = append(o, val)
 	}
 	return o
 }
 
-func (r *orderRepository) FindAllForUser(userId user.UserId) []*order.Order {
+func (r *orderRepository) FindAllForUser(userId userModel.UserId) []*orderModel.Order {
 	r.mtx.RLock()
 	defer r.mtx.RUnlock()
-	o := []*order.Order{}
+	o := []*orderModel.Order{}
 	for _, val := range r.orders {
 		if userId == val.UserId {
 			o = append(o, val)
@@ -320,13 +320,13 @@ func (r *orderRepository) FindAllForUser(userId user.UserId) []*order.Order {
 	return o
 }
 
-func NewOrderRepository() order.Repository {
+func NewOrderRepository() orderModel.Repository {
 	r := &orderRepository{
-		orders: make(map[order.OrderId]*order.Order),
+		orders: make(map[orderModel.OrderId]*orderModel.Order),
 	}
 
-	r.orders[order.O0001] = order.Order1
-	r.orders[order.O0002] = order.Order2
+	r.orders[orderModel.O0001] = orderModel.Order1
+	r.orders[orderModel.O0002] = orderModel.Order2
 
 	return r
 }

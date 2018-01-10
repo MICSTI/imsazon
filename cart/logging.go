@@ -2,8 +2,8 @@ package cart
 
 import (
 	"github.com/go-kit/kit/log"
-	"github.com/MICSTI/imsazon/models/product"
-	"github.com/MICSTI/imsazon/models/user"
+	productModel "github.com/MICSTI/imsazon/models/product"
+	userModel "github.com/MICSTI/imsazon/models/user"
 	"time"
 )
 
@@ -17,7 +17,7 @@ func NewLoggingService(logger log.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) GetCart(userId user.UserId) (cartItems []*product.SimpleProduct, err error) {
+func (s *loggingService) GetCart(userId userModel.UserId) (cartItems []*productModel.SimpleProduct, err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "GetCart",
@@ -29,7 +29,7 @@ func (s *loggingService) GetCart(userId user.UserId) (cartItems []*product.Simpl
 	return s.Service.GetCart(userId)
 }
 
-func (s *loggingService) Put(userId user.UserId, productId product.ProductId, quantity int) (updatedCart []*product.SimpleProduct, err error) {
+func (s *loggingService) Put(userId userModel.UserId, productId productModel.ProductId, quantity int) (updatedCart []*productModel.SimpleProduct, err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "Put",
@@ -43,7 +43,7 @@ func (s *loggingService) Put(userId user.UserId, productId product.ProductId, qu
 	return s.Service.Put(userId, productId, quantity)
 }
 
-func (s *loggingService) Remove(userId user.UserId, productId product.ProductId) (updatedCart []*product.SimpleProduct, err error) {
+func (s *loggingService) Remove(userId userModel.UserId, productId productModel.ProductId) (updatedCart []*productModel.SimpleProduct, err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "Remove",

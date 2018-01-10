@@ -1,19 +1,19 @@
 package cart
 
 import (
-	"github.com/MICSTI/imsazon/models/user"
-	"github.com/MICSTI/imsazon/models/product"
+	userModel "github.com/MICSTI/imsazon/models/user"
+	productModel "github.com/MICSTI/imsazon/models/product"
 	"github.com/go-kit/kit/endpoint"
 	"context"
 )
 
 type getCartRequest struct {
-	UserId			user.UserId
+	UserId			userModel.UserId
 }
 
 type getCartResponse struct {
-	UserId			user.UserId						`json:"userId,omitempty"`
-	CartItems		[]*product.SimpleProduct		`json:"items"`
+	UserId			userModel.UserId						`json:"userId,omitempty"`
+	CartItems		[]*productModel.SimpleProduct		`json:"items"`
 	Err				error							`json:"error,omitempty"`
 }
 
@@ -28,14 +28,14 @@ func makeGetCartEndpoint(s Service) endpoint.Endpoint {
 }
 
 type putItemRequest struct {
-	UserId			user.UserId
-	ProductId		product.ProductId
+	UserId			userModel.UserId
+	ProductId		productModel.ProductId
 	Quantity		int
 }
 
 type putItemResponse struct {
-	UserId			user.UserId						`json:"userId,omitempty"`
-	CartItems		[]*product.SimpleProduct		`json:"items"`
+	UserId			userModel.UserId						`json:"userId,omitempty"`
+	CartItems		[]*productModel.SimpleProduct		`json:"items"`
 	Err				error							`json:"error,omitempty"`
 }
 
@@ -50,13 +50,13 @@ func makePutItemEndpoint(s Service) endpoint.Endpoint {
 }
 
 type removeItemRequest struct {
-	UserId			user.UserId
-	ProductId		product.ProductId
+	UserId			userModel.UserId
+	ProductId		productModel.ProductId
 }
 
 type removeItemResponse struct {
-	UserId			user.UserId						`json:"userId,omitempty"`
-	CartItems		[]*product.SimpleProduct		`json:"items"`
+	UserId			userModel.UserId						`json:"userId,omitempty"`
+	CartItems		[]*productModel.SimpleProduct		`json:"items"`
 	Err				error							`json:"error,omitempty"`
 }
 

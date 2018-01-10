@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"context"
 	"net/http"
-	"github.com/MICSTI/imsazon/models/user"
-	"github.com/MICSTI/imsazon/models/product"
+	userModel "github.com/MICSTI/imsazon/models/user"
+	productModel "github.com/MICSTI/imsazon/models/product"
 	"github.com/gorilla/mux"
 )
 
@@ -50,7 +50,7 @@ func MakeHandler(cs Service, logger kitlog.Logger) http.Handler {
 
 func decodeGetCartRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		UserId			user.UserId			`json:"userId"`
+		UserId			userModel.UserId			`json:"userId"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -64,9 +64,9 @@ func decodeGetCartRequest(_ context.Context, r *http.Request) (interface{}, erro
 
 func decodePutItemRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		UserId			user.UserId			`json:"userId"`
-		ProductId		product.ProductId	`json:"productId"`
-		Quantity		int					`json:"quantity"`
+		UserId			userModel.UserId		`json:"userId"`
+		ProductId		productModel.ProductId	`json:"productId"`
+		Quantity		int						`json:"quantity"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -82,8 +82,8 @@ func decodePutItemRequest(_ context.Context, r *http.Request) (interface{}, erro
 
 func decodeRemoveItemRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		UserId			user.UserId			`json:"userId"`
-		ProductId		product.ProductId	`json:"productId"`
+		UserId			userModel.UserId			`json:"userId"`
+		ProductId		productModel.ProductId		`json:"productId"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {

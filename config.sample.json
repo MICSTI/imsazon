@@ -8,5 +8,6 @@
     "username": "USERNAME",
     "password": "PASSWORD",
     "from": "\"DISPLAY_NAME\" <EMAIL_ADDRESS>"
-  }
+  },
+  "testMailRecipient": "\"DISPLAY_NAME\" <EMAIL_ADDRESS>"
 }

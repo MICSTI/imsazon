@@ -60,9 +60,9 @@ func MakeHandler(ors Service, logger kitlog.Logger) http.Handler {
 	r := mux.NewRouter()
 
 	r.Handle("/order/create", createHandler).Methods("POST")
-	r.Handle("/order/{orderId}/update", updateStatusHandler).Methods("POST")
-	r.Handle("/order/{orderId}", getByIdHandler).Methods("GET")
-	r.Handle("/order/all", getAllHandler).Methods("GET")
+	r.Handle("/order/update/{orderId}", updateStatusHandler).Methods("POST")
+	r.Handle("/order/get/{orderId}", getByIdHandler).Methods("GET")
+	r.Handle("/order/get/all", getAllHandler).Methods("GET")
 	r.Handle("/order/user/{userId}", getAllForUserHandler).Methods("GET")
 
 	return r

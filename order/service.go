@@ -41,7 +41,7 @@ func (s *service) Create(newOrder *orderModel.Order) (order *orderModel.Order, e
 
 	newOrder.Id = orderModel.GetRandomOrderId()
 
-	return s.Create(newOrder)
+	return s.orders.Create(newOrder)
 }
 
 func (s *service) UpdateStatus(id orderModel.OrderId, newStatus orderModel.OrderStatus) (order *orderModel.Order, err error) {
@@ -49,7 +49,7 @@ func (s *service) UpdateStatus(id orderModel.OrderId, newStatus orderModel.Order
 		return nil, ErrInvalidArgument
 	}
 
-	return s.UpdateStatus(id, newStatus)
+	return s.orders.UpdateStatus(id, newStatus)
 }
 
 func (s *service) GetById(id orderModel.OrderId) (*orderModel.Order, error) {
@@ -57,11 +57,11 @@ func (s *service) GetById(id orderModel.OrderId) (*orderModel.Order, error) {
 		return nil, ErrInvalidArgument
 	}
 
-	return s.GetById(id)
+	return s.orders.Find(id)
 }
 
 func (s *service) GetAll() []*orderModel.Order {
-	return s.GetAll()
+	return s.orders.FindAll()
 }
 
 func (s *service) GetAllForUser(userId user.UserId) []*orderModel.Order {
@@ -69,7 +69,7 @@ func (s *service) GetAllForUser(userId user.UserId) []*orderModel.Order {
 		return nil
 	}
 
-	return s.GetAllForUser(userId)
+	return s.orders.FindAllForUser(userId)
 }
 
 // NewService returns an order service with necessary dependencies.

@@ -21,7 +21,6 @@ type MailServerCredentials struct {
 
 type Email struct {
 	To				string
-	From			string
 	Subject			string
 	Body			string
 	ContentType		string
@@ -34,18 +33,18 @@ type Service interface {
 
 type service struct {
 	mailServerConfig	MailServerCredentials
+	from				string
 }
 
 func(s *service) Send(email Email) error {
 	m := gomail.NewMessage()
-	m.SetHeader("From", email.From)
+	m.SetHeader("From", s.from)
 	m.SetHeader("To", email.To)
 	m.SetHeader("Subject", email.Subject)
 	m.SetBody(email.ContentType, email.Body)
 
 	d := gomail.NewDialer(s.mailServerConfig.Host, s.mailServerConfig.Port, s.mailServerConfig.Username, s.mailServerConfig.Password)
 
-	// Send the email to Bob, Cora and Dan.
 	if err := d.DialAndSend(m); err != nil {
 		return err
 	}
@@ -53,8 +52,9 @@ func(s *service) Send(email Email) error {
 	return nil
 }
 
-func NewService(mailServerConfig MailServerCredentials) Service {
+func NewService(mailServerConfig MailServerCredentials, from string) Service {
 	return &service{
 		mailServerConfig: mailServerConfig,
+		from: from,
 	}
 }

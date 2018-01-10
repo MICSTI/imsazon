@@ -32,7 +32,6 @@ func MakeHandler(ms Service, logger kitlog.Logger) http.Handler {
 
 func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		From		string		`json:"from"`
 		To			string		`json:"to"`
 		Subject		string		`json:"subject"`
 		Body		string		`json:"body"`
@@ -45,7 +44,6 @@ func decodeSendRequest(_ context.Context, r *http.Request) (interface{}, error) 
 
 	return sendRequest{
 		email:	Email{
-			From:			body.From,
 			To:				body.To,
 			Subject:		body.Subject,
 			Body:			body.Body,

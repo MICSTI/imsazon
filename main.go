@@ -80,6 +80,11 @@ func main() {
 		log2.Fatal("Could not get mail password config value")
 	}
 
+	mailFrom, err := config.GetString("mail/from", "")
+	if err != nil {
+		log2.Fatal("Could not get mail from config value")
+	}
+
 	mailServerCredentials := mail.MailServerCredentials{
 		Host: 		mailHost,
 		Port:		mailPort,
@@ -109,7 +114,7 @@ func main() {
 	as = auth.NewLoggingService(log.With(logger, "component", "auth"), as)
 
 	var ms mail.Service
-	ms = mail.NewService(mailServerCredentials)
+	ms = mail.NewService(mailServerCredentials, mailFrom)
 	ms = mail.NewLoggingService(log.With(logger, "component", "mail"), ms)
 
 	var sts stock.Service

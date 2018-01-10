@@ -286,7 +286,7 @@ func (r *orderRepository) UpdateStatus(id orderModel.OrderId, newStatus orderMod
 	// it is only possible to go to "Shipped" state when the previous state was "Payment Successful"
 	// Remark: of course there should be more safe-checks for manipulating the state
 	if newStatus == orderModel.Shipped && o.Status != orderModel.PaymentSuccessful {
-		return nil, ErrInvalidOperation
+		return nil, orderModel.ErrInvalidOperation
 	}
 
 	r.mtx.Lock()

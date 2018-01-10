@@ -8,7 +8,7 @@ package stock
 
 import (
 	"errors"
-	"github.com/MICSTI/imsazon/models/product"
+	productModel "github.com/MICSTI/imsazon/models/product"
 )
 
 // ErrInvalidArgument is returned when on or more arguments are invalid
@@ -16,54 +16,54 @@ var ErrInvalidArgument = errors.New("Invalid argument")
 
 type Service interface {
 	// GetItems returns an array of all stock products including their quantity
-	GetItems() []*product.Product
+	GetItems() []*productModel.Product
 
 	// Add adds an item with the specified quantity to the stock. Returns a new product object with the updated stock information.
-	Add(productToAdd *product.Product) (*product.Product, error)
+	Add(productToAdd *productModel.Product) (*productModel.Product, error)
 
 	// Withdraw removes the specified quantity from the stock. Returns a new product object with the updated stock information.
-	Withdraw(productToWithdraw *product.Product) (*product.Product, error)
+	Withdraw(productToWithdraw *productModel.Product) (*productModel.Product, error)
 }
 
 type service struct {
-	products		product.Repository
+	products		productModel.Repository
 }
 
-func(s *service) GetItems() []*product.Product {
+func(s *service) GetItems() []*productModel.Product {
 	p := s.products.FindAll()
 
 	return p
 }
 
-func(s *service) Add(productToAdd *product.Product) (*product.Product, error) {
+func(s *service) Add(productToAdd *productModel.Product) (*productModel.Product, error) {
 	if productToAdd.Id == "" {
-		return &product.Product{}, ErrInvalidArgument
+		return &productModel.Product{}, ErrInvalidArgument
 	}
 
 	p, err := s.products.Add(productToAdd)
 
 	if err != nil {
-		return &product.Product{}, err
+		return &productModel.Product{}, err
 	}
 
 	return p, nil
 }
 
-func(s *service) Withdraw(productToWithdraw *product.Product) (*product.Product, error) {
+func(s *service) Withdraw(productToWithdraw *productModel.Product) (*productModel.Product, error) {
 	if productToWithdraw.Id == "" {
-		return &product.Product{}, ErrInvalidArgument
+		return &productModel.Product{}, ErrInvalidArgument
 	}
 
 	p, err := s.products.Withdraw(productToWithdraw)
 
 	if err != nil {
-		return &product.Product{}, err
+		return &productModel.Product{}, err
 	}
 
 	return p, nil
 }
 
-func NewService(products product.Repository) Service {
+func NewService(products productModel.Repository) Service {
 	return &service{
 		products: products,
 		}

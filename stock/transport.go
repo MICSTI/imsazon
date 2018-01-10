@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"context"
 	"net/http"
-	"github.com/MICSTI/imsazon/models/product"
+	productModel "github.com/MICSTI/imsazon/models/product"
 	"github.com/gorilla/mux"
 )
 
@@ -54,7 +54,7 @@ func decodeGetItemRequest(_ context.Context, r *http.Request) (interface{}, erro
 
 func decodeAddRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		ProductToAdd		product.Product		`json:"product"`
+		ProductToAdd		productModel.Product		`json:"product"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -68,7 +68,7 @@ func decodeAddRequest(_ context.Context, r *http.Request) (interface{}, error) {
 
 func decodeWithdrawRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		ProductToWithdraw	product.Product		`json:"product"`
+		ProductToWithdraw	productModel.Product		`json:"product"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -100,9 +100,9 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	switch err {
 	case ErrInvalidArgument:
 		w.WriteHeader(http.StatusBadRequest)
-	case product.ErrNotEnoughItems:
+	case productModel.ErrNotEnoughItems:
 		w.WriteHeader(http.StatusBadRequest)
-	case product.ErrProductUnknown:
+	case productModel.ErrProductUnknown:
 		w.WriteHeader(http.StatusBadRequest)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)

@@ -18,6 +18,7 @@ import (
 	"github.com/MICSTI/imsazon/stock"
 	"github.com/MICSTI/imsazon/payment"
 	"github.com/MICSTI/imsazon/cart"
+	"github.com/MICSTI/imsazon/order"
 )
 
 const (
@@ -94,6 +95,7 @@ func main() {
 		users = inmemory.NewUserRepository()
 		products = inmemory.NewProductRepository()
 		carts = inmemory.NewCartRepository()
+		orders = inmemory.NewOrderRepository()
 	)
 
 	// all services are initialized here
@@ -121,6 +123,10 @@ func main() {
 	cs = cart.NewService(carts)
 	cs = cart.NewLoggingService(log.With(logger, "component", "cart"), cs)
 
+	var os order.Service
+	os = order.NewService(orders)
+	os = order.NewLoggingService(log.With(logger, "component", "order"), os)
+
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
 
@@ -133,6 +139,7 @@ func main() {
 	mux.Handle("/stock/", stock.MakeHandler(sts, httpLogger))
 	mux.Handle("/payment/", payment.MakeHandler(ps, httpLogger))
 	mux.Handle("/cart/", cart.MakeHandler(cs, httpLogger))
+	mux.Handle("/order/", order.MakeHandler(os, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

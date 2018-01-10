@@ -145,7 +145,7 @@ func main() {
 	mux.Handle("/payment/", payment.MakeHandler(ps, httpLogger))
 	mux.Handle("/cart/", cart.MakeHandler(cs, httpLogger))
 	mux.Handle("/order/", order.MakeHandler(ors, httpLogger))
-	mux.Handle("/shipping/", shipping.MakeHandler(shs, httpLogger))
+	mux.Handle("/ship/", shipping.MakeHandler(shs, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

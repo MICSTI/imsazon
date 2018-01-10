@@ -3,7 +3,7 @@ package order
 import (
 	"github.com/go-kit/kit/log"
 	orderModel "github.com/MICSTI/imsazon/models/order"
-	"github.com/MICSTI/imsazon/models/user"
+	userModel "github.com/MICSTI/imsazon/models/user"
 	"time"
 )
 
@@ -65,7 +65,7 @@ func (s *loggingService) GetAll() []*orderModel.Order {
 	return s.Service.GetAll()
 }
 
-func (s *loggingService) GetAllForUser(userId user.UserId) []*orderModel.Order {
+func (s *loggingService) GetAllForUser(userId userModel.UserId) []*orderModel.Order {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "GetAllForUser",

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"context"
 	"github.com/gorilla/mux"
-	"github.com/MICSTI/imsazon/models/user"
-	"github.com/MICSTI/imsazon/models/product"
+	userModel "github.com/MICSTI/imsazon/models/user"
+	productModel "github.com/MICSTI/imsazon/models/product"
 	orderModel "github.com/MICSTI/imsazon/models/order"
 	"errors"
 )
@@ -70,8 +70,8 @@ func MakeHandler(ors Service, logger kitlog.Logger) http.Handler {
 
 func decodeCreateRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var body struct {
-		UserId			user.UserId					`json:"userId"`
-		Items			[]*product.SimpleProduct	`json:"items"`
+		UserId			userModel.UserId					`json:"userId"`
+		Items			[]*productModel.SimpleProduct		`json:"items"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -134,7 +134,7 @@ func decodeGetAllForUserRequest(_ context.Context, r *http.Request) (interface{}
 	}
 
 	return getAllForUserRequest{
-		UserId:		user.UserId(userId),
+		UserId:		userModel.UserId(userId),
 	}, nil
 }
 

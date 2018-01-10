@@ -1,10 +1,10 @@
 package order
 
 import (
+	userModel "github.com/MICSTI/imsazon/models/user"
 	orderModel "github.com/MICSTI/imsazon/models/order"
 	"github.com/go-kit/kit/endpoint"
 	"context"
-	"github.com/MICSTI/imsazon/models/user"
 )
 
 type createRequest struct {
@@ -81,7 +81,7 @@ func makeGetAllEndpoint(s Service) endpoint.Endpoint {
 }
 
 type getAllForUserRequest struct {
-	UserId			user.UserId
+	UserId			userModel.UserId
 }
 
 type getAllForUserResponse struct {

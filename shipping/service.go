@@ -8,6 +8,7 @@ import (
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
 var ErrInvalidArgument = errors.New("Invalid argument")
+var ErrShippingNotPossible = errors.New("Shipping is currently not possible for this order")
 
 // Service is the interface that provides the shipping methods
 type Service interface {
@@ -27,6 +28,8 @@ func (s *service) Ship(orderId orderModel.OrderId) (err error) {
 	// we can't really do anything, so we just add a delay and trigger the sending of an email
 	duration := time.Millisecond * 750
 	time.Sleep(duration)
+
+	// TODO call order service to mark order as "shipped"
 
 	// TODO call mail service
 

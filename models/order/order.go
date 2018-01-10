@@ -74,6 +74,10 @@ type Repository interface {
 // ErrUnknown is used when an ordercould not be found.
 var ErrUnknown = errors.New("Unknown order")
 
+// ErrInvalidOperation is returned when an illegal operation on the order model is being executed.
+// e.g. setting the OrderStatus to "Shipped" although the old status was not "Payment Successful"
+var ErrInvalidOperation = errors.New("Invalid operation")
+
 // create random string for OrderIds
 var src = rand.NewSource(time.Now().UnixNano())
 

@@ -49,7 +49,7 @@ func (s OrderStatus) String() string {
 type Order struct {
 	Id			OrderId						`json:"id"`
 	UserId		user.UserId					`json:"userId"`
-	Status		OrderStatus					`json:"status,string"`
+	Status		OrderStatus					`json:"status,String"`
 	Items		[]*product.SimpleProduct	`json:"items"`
 }
 

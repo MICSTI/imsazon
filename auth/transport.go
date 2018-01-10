@@ -8,7 +8,7 @@ import (
 	"context"
 	"errors"
 	"github.com/gorilla/mux"
-	"github.com/MICSTI/imsazon/models/user"
+	userModel "github.com/MICSTI/imsazon/models/user"
 )
 
 // MakeHandler returns the handler for the auth service
@@ -92,7 +92,7 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	switch err {
 	case ErrInvalidArgument:
 		w.WriteHeader(http.StatusBadRequest)
-	case user.ErrUnknown:
+	case userModel.ErrUnknown:
 		w.WriteHeader(http.StatusForbidden)
 	case ErrInvalid:
 		w.WriteHeader(http.StatusForbidden)

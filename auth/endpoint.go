@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/go-kit/kit/endpoint"
 	"context"
-	"github.com/MICSTI/imsazon/models/user"
+	userModel "github.com/MICSTI/imsazon/models/user"
 )
 
 type loginRequest struct {
@@ -31,7 +31,7 @@ type checkRequest struct {
 }
 
 type checkResponse struct {
-	UserId	user.UserId	`json:"userId,omitempty"`
+	UserId	userModel.UserId	`json:"userId,omitempty"`
 	Err		error	`json:"error,omitempty"`
 }
 

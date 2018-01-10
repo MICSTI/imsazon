@@ -6,7 +6,7 @@ package auth
 
 import (
 	"errors"
-	"github.com/MICSTI/imsazon/models/user"
+	userModel "github.com/MICSTI/imsazon/models/user"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
@@ -26,12 +26,12 @@ type Service interface {
 	Login(username string, password string) (string, error)
 
 	// Check checks if the passed JWT auth token is valid
-	Check(token string) (user.UserId, error)
+	Check(token string) (userModel.UserId, error)
 }
 
 type service struct {
 	jwtSecret	[]byte
-	users		user.Repository
+	users		userModel.Repository
 }
 
 // create a custom JWT claims struct
@@ -67,7 +67,7 @@ func (s *service) Login(username string, password string) (string, error) {
 	return signedToken, nil
 }
 
-func (s *service) Check(tokenString string) (user.UserId, error) {
+func (s *service) Check(tokenString string) (userModel.UserId, error) {
 	if tokenString == "" {
 		return "", ErrInvalidArgument
 	}
@@ -83,7 +83,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 
 	if token.Valid {
 		if claims, ok := token.Claims.(*CustomClaims); ok {
-			userId := user.UserId(claims.Subject)
+			userId := userModel.UserId(claims.Subject)
 
 			return userId, nil
 		} else {
@@ -103,7 +103,7 @@ func (s *service) Check(tokenString string) (user.UserId, error) {
 }
 
 // NewService returns a new instance of the auth service
-func NewService(jwtSecret []byte, users user.Repository) Service {
+func NewService(jwtSecret []byte, users userModel.Repository) Service {
 	return &service{
 		jwtSecret:	jwtSecret,
 		users:		users,

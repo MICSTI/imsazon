@@ -3,7 +3,7 @@ package auth
 import (
 	"github.com/go-kit/kit/log"
 	"time"
-	"github.com/MICSTI/imsazon/models/user"
+	userModel "github.com/MICSTI/imsazon/models/user"
 )
 
 type loggingService struct {
@@ -28,7 +28,7 @@ func (s *loggingService) Login(username string, password string) (signedToken st
 	return s.Service.Login(username, password)
 }
 
-func (s *loggingService) Check(tokenString string) (userId user.UserId, err error) {
+func (s *loggingService) Check(tokenString string) (userId userModel.UserId, err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "Check",

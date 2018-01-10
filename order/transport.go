@@ -158,6 +158,10 @@ func encodeError(_ context.Context, err error, w http.ResponseWriter) {
 	switch err {
 	case ErrInvalidArgument:
 		w.WriteHeader(http.StatusBadRequest)
+	case orderModel.ErrUnknown:
+		w.WriteHeader(http.StatusBadRequest)
+	case ErrBadRoute:
+		w.WriteHeader(http.StatusBadRequest)
 	default:
 		w.WriteHeader(http.StatusInternalServerError)
 	}

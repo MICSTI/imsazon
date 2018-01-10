@@ -7,7 +7,11 @@ import (
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+	"bytes"
 )
+
+const getSingleOrderApiUrl = "http://localhost:8605/order/single/"
+const updateOrderStatusApiUrl = "http://localhost:8605/order/update/"
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
 var ErrInvalidArgument = errors.New("Invalid argument")
@@ -49,7 +53,12 @@ func (s *service) Ship(orderId orderModel.OrderId) (error) {
 	duration := time.Millisecond * 750
 	time.Sleep(duration)
 
-	// TODO call order service to mark order as "shipped"
+	// call order service to mark order as "shipped"
+	err = setOrderStatus(orderId, orderModel.Shipped)
+
+	if err != nil {
+		return ErrShippingNotPossible
+	}
 
 	// TODO call mail service
 
@@ -67,7 +76,7 @@ func parseOrderStatusResponse(body []byte) (*OrderStatusApiResponse, error) {
 }
 
 func getOrderStatus(id orderModel.OrderId) (orderModel.OrderStatus, error) {
-	resp, err := http.Get("http://localhost:8605/order/single/" + id.String())
+	resp, err := http.Get(getSingleOrderApiUrl + id.String())
 
 	if err != nil {
 		return orderModel.Created, ErrApi
@@ -88,6 +97,31 @@ func getOrderStatus(id orderModel.OrderId) (orderModel.OrderStatus, error) {
 	}
 
 	return parsed.Order.Status, nil
+}
+
+func setOrderStatus(id orderModel.OrderId, newStatus orderModel.OrderStatus) error {
+	message := map[string]interface{}{
+		"status": newStatus,
+	}
+
+	bytesRepresentation, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(updateOrderStatusApiUrl + id.String(), "application/json", bytes.NewBuffer(bytesRepresentation))
+
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return ErrApi
+	}
+
+	return nil
 }
 
 // NewService creates a shipping service

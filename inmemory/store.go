@@ -321,7 +321,12 @@ func (r *orderRepository) FindAllForUser(userId user.UserId) []*order.Order {
 }
 
 func NewOrderRepository() order.Repository {
-	return &orderRepository{
+	r := &orderRepository{
 		orders: make(map[order.OrderId]*order.Order),
 	}
+
+	r.orders[order.O0001] = order.Order1
+	r.orders[order.O0002] = order.Order2
+	
+	return r
 }

@@ -8,10 +8,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"bytes"
+	"github.com/MICSTI/imsazon/mail"
 )
 
 const getSingleOrderApiUrl = "http://localhost:8605/order/single/"
 const updateOrderStatusApiUrl = "http://localhost:8605/order/update/"
+const sendMailApiUrl = "http://localhost:8605/mail/send"
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
 var ErrInvalidArgument = errors.New("Invalid argument")
@@ -26,7 +28,7 @@ type Service interface {
 }
 
 type service struct {
-
+	testMailRecipient		string
 }
 
 type OrderStatusApiResponse struct {
@@ -60,8 +62,10 @@ func (s *service) Ship(orderId orderModel.OrderId) (error) {
 		return ErrShippingNotPossible
 	}
 
-	// TODO call mail service
+	// call the mail service to send out an email that the order was shipped successfully
+	mail := mail.New(s.testMailRecipient, "Your order has been shipped", successfulShippingMailBody, "text/html")
 
+	err = sendMail(mail)
 
 	return nil
 }
@@ -124,9 +128,44 @@ func setOrderStatus(id orderModel.OrderId, newStatus orderModel.OrderStatus) err
 	return nil
 }
 
-// NewService creates a shipping service
-func NewService() Service {
-	return &service{
+func sendMail(mail mail.Email) error {
+	message := map[string]interface{}{
+		"to": mail.To,
+		"subject": mail.Subject,
+		"body": mail.Body,
+		"contentType": mail.ContentType,
+	}
 
+	bytesRepresentation, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(sendMailApiUrl, "application/json", bytes.NewBuffer(bytesRepresentation))
+
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return ErrApi
+	}
+
+	return nil
+}
+
+// NewService creates a shipping service
+func NewService(testMailRecipient string) Service {
+	return &service{
+		testMailRecipient: testMailRecipient,
 	}
 }
+
+const successfulShippingMailBody = `
+	<div style="font-size: 18pt; font-weight: bold; text-align: center; margin-bottom: 16px;">IMSazon</div>
+	<div style="font-size: 14pt; margin-bottom: 16px;">Your order has been shipped succcessfully!</div>
+	<div style="font-size: 12pt; margin-bottom: 10px;">Thank you so much for ordering from us, we hope you will be delighted with your new things</div> 
+	<div style="font-size: 12pt; margin-bottom: 10px;">- Michael from <b>IMSazon</b>
+`

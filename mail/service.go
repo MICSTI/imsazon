@@ -37,7 +37,7 @@ func New(to string, subject string, body string, contentType string) *Email {
 
 // Service is the interface that provides the mail send method
 type Service interface {
-	Send(email Email) error
+	Send(email *Email) error
 }
 
 type service struct {
@@ -45,7 +45,7 @@ type service struct {
 	from				string
 }
 
-func(s *service) Send(email Email) error {
+func(s *service) Send(email *Email) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", s.from)
 	m.SetHeader("To", email.To)

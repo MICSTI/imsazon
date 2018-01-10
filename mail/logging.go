@@ -15,7 +15,7 @@ func NewLoggingService(logger log.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) Send(email Email) (err error) {
+func (s *loggingService) Send(email *Email) (err error) {
 	defer func(begin time.Time) {
 		s.logger.Log(
 			"method", "Send",

@@ -85,6 +85,11 @@ func main() {
 		log2.Fatal("Could not get mail from config value")
 	}
 
+	testMailRecipient, err := config.GetString("testMailRecipient", "")
+	if err != nil {
+		log2.Fatal("Could not get test mail recipient from config value")
+	}
+
 	mailServerCredentials := mail.MailServerCredentials{
 		Host: 		mailHost,
 		Port:		mailPort,
@@ -134,7 +139,7 @@ func main() {
 	ors = order.NewLoggingService(log.With(logger, "component", "order"), ors)
 
 	var shs shipping.Service
-	shs = shipping.NewService()
+	shs = shipping.NewService(testMailRecipient)
 	shs = shipping.NewLoggingService(log.With(logger, "component", "shipping"), shs)
 
 	// now comes the HTTP REST API stuff

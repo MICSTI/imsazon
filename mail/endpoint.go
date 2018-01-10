@@ -6,7 +6,7 @@ import (
 )
 
 type sendRequest struct {
-	email			Email
+	email			*Email
 }
 
 type sendResponse struct {

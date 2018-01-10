@@ -25,6 +25,9 @@ func (s *service) Ship(orderId orderModel.OrderId) (err error) {
 		return ErrInvalidArgument
 	}
 
+	// check the order service if the current order status is "Payment Successful"
+
+
 	// we can't really do anything, so we just add a delay and trigger the sending of an email
 	duration := time.Millisecond * 750
 	time.Sleep(duration)

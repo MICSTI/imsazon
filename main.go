@@ -123,9 +123,9 @@ func main() {
 	cs = cart.NewService(carts)
 	cs = cart.NewLoggingService(log.With(logger, "component", "cart"), cs)
 
-	var os order.Service
-	os = order.NewService(orders)
-	os = order.NewLoggingService(log.With(logger, "component", "order"), os)
+	var ors order.Service
+	ors = order.NewService(orders)
+	ors = order.NewLoggingService(log.With(logger, "component", "order"), ors)
 
 	// now comes the HTTP REST API stuff
 	httpLogger := log.With(logger, "component", "http")
@@ -139,7 +139,7 @@ func main() {
 	mux.Handle("/stock/", stock.MakeHandler(sts, httpLogger))
 	mux.Handle("/payment/", payment.MakeHandler(ps, httpLogger))
 	mux.Handle("/cart/", cart.MakeHandler(cs, httpLogger))
-	mux.Handle("/order/", order.MakeHandler(os, httpLogger))
+	mux.Handle("/order/", order.MakeHandler(ors, httpLogger))
 
 	http.Handle("/", accessControl(mux))
 

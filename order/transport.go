@@ -16,42 +16,42 @@ import (
 var ErrBadRoute = errors.New("Bad route")
 
 // MakeHandler returns a handler for the order service.
-func MakeHandler(os Service, logger kitlog.Logger) http.Handler {
+func MakeHandler(ors Service, logger kitlog.Logger) http.Handler {
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorLogger(logger),
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
 	createHandler := kithttp.NewServer(
-		makeCreateEndpoint(os),
+		makeCreateEndpoint(ors),
 		decodeCreateRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	updateStatusHandler := kithttp.NewServer(
-		makeUpdateStatusEndpoint(os),
+		makeUpdateStatusEndpoint(ors),
 		decodeUpdateStatusRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	getByIdHandler := kithttp.NewServer(
-		makeGetByIdEndpoint(os),
+		makeGetByIdEndpoint(ors),
 		decodeGetByIdRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	getAllHandler := kithttp.NewServer(
-		makeGetAllEndpoint(os),
+		makeGetAllEndpoint(ors),
 		decodeGetAllRequest,
 		encodeResponse,
 		opts...,
 	)
 
 	getAllForUserHandler := kithttp.NewServer(
-		makeGetAllForUserEndpoint(os),
+		makeGetAllForUserEndpoint(ors),
 		decodeGetAllForUserRequest,
 		encodeResponse,
 		opts...,

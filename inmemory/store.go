@@ -327,6 +327,6 @@ func NewOrderRepository() order.Repository {
 
 	r.orders[order.O0001] = order.Order1
 	r.orders[order.O0002] = order.Order2
-	
+
 	return r
 }

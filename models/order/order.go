@@ -103,5 +103,5 @@ func RandStringBytesMaskImprSrc(n int) string {
 }
 
 func GetRandomOrderId() OrderId {
-	return OrderId(RandStringBytesMaskImprSrc(8))
+	return OrderId(RandStringBytesMaskImprSrc(16))
 }

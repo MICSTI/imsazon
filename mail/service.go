@@ -26,6 +26,15 @@ type Email struct {
 	ContentType		string
 }
 
+func New(to string, subject string, body string, contentType string) *Email {
+	return &Email{
+		To:				to,
+		Subject:		subject,
+		Body:			body,
+		ContentType:	contentType,
+	}
+}
+
 // Service is the interface that provides the mail send method
 type Service interface {
 	Send(email Email) error

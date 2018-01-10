@@ -22,13 +22,48 @@ func MakeHandler(os Service, logger kitlog.Logger) http.Handler {
 		kithttp.ServerErrorEncoder(encodeError),
 	}
 
+	createHandler := kithttp.NewServer(
+		makeCreateEndpoint(os),
+		decodeCreateRequest,
+		encodeResponse,
+		opts...,
+	)
+
+	updateStatusHandler := kithttp.NewServer(
+		makeUpdateStatusEndpoint(os),
+		decodeUpdateStatusRequest,
+		encodeResponse,
+		opts...,
+	)
+
+	getByIdHandler := kithttp.NewServer(
+		makeGetByIdEndpoint(os),
+		decodeGetByIdRequest,
+		encodeResponse,
+		opts...,
+	)
+
+	getAllHandler := kithttp.NewServer(
+		makeGetAllEndpoint(os),
+		decodeGetAllRequest,
+		encodeResponse,
+		opts...,
+	)
+
+	getAllForUserHandler := kithttp.NewServer(
+		makeGetAllForUserEndpoint(os),
+		decodeGetAllForUserRequest,
+		encodeResponse,
+		opts...,
+	)
+
 	r := mux.NewRouter()
 
-	r.Handle("/order/create", nil).Methods("POST")
-	r.Handle("/order/{orderId}/update", nil).Methods("POST")
-	r.Handle("/order/{orderId}", nil).Methods("GET")
-	r.Handle("/order/all", nil).Methods("GET")
-	r.Handle("/order/user/{userId}", nil).Methods("GET")
+	r.Handle("/order/create", createHandler).Methods("POST")
+	r.Handle("/order/{orderId}/update", updateStatusHandler).Methods("POST")
+	r.Handle("/order/{orderId}", getByIdHandler).Methods("GET")
+	r.Handle("/order/all", getAllHandler).Methods("GET")
+	r.Handle("/order/user/{userId}", getAllForUserHandler).Methods("GET")
 
 	return r
 }
@@ -68,6 +103,38 @@ func decodeUpdateStatusRequest(_ context.Context, r *http.Request) (interface{},
 	return updateStatusRequest{
 		Id:			orderModel.OrderId(id),
 		NewStatus:	body.Status,
+	}, nil
+}
+
+func decodeGetByIdRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	vars := mux.Vars(r)
+
+	id, ok := vars["orderId"]
+
+	if !ok {
+		return nil, ErrBadRoute
+	}
+
+	return getByIdRequest{
+		Id:		orderModel.OrderId(id),
+	}, nil
+}
+
+func decodeGetAllRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	return getAllRequest{}, nil
+}
+
+func decodeGetAllForUserRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	vars := mux.Vars(r)
+
+	userId, ok := vars["userId"]
+
+	if !ok {
+		return nil, ErrBadRoute
+	}
+
+	return getAllForUserRequest{
+		UserId:		user.UserId(userId),
 	}, nil
 }
 

@@ -81,7 +81,7 @@ func makeGetAllEndpoint(s Service) endpoint.Endpoint {
 }
 
 type getAllForUserRequest struct {
-	userId			user.UserId
+	UserId			user.UserId
 }
 
 type getAllForUserResponse struct {
@@ -91,7 +91,7 @@ type getAllForUserResponse struct {
 func makeGetAllForUserEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getAllForUserRequest)
-		orders := s.GetAllForUser(req.userId)
+		orders := s.GetAllForUser(req.UserId)
 		return getAllForUserResponse{Orders: orders}, nil
 	}
 }

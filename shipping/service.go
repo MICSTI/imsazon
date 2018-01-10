@@ -67,7 +67,7 @@ func parseOrderStatusResponse(body []byte) (*OrderStatusApiResponse, error) {
 }
 
 func getOrderStatus(id orderModel.OrderId) (orderModel.OrderStatus, error) {
-	resp, err := http.Get("http://localhost:8605/order/single/" + id)
+	resp, err := http.Get("http://localhost:8605/order/single/" + id.String())
 
 	if err != nil {
 		return orderModel.Created, ErrApi

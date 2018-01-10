@@ -47,10 +47,10 @@ func (s OrderStatus) String() string {
 }
 
 type Order struct {
-	Id			OrderId
-	UserId		user.UserId
-	Status		OrderStatus
-	Items		[]*product.SimpleProduct
+	Id			OrderId						`json:"id"`
+	UserId		user.UserId					`json:"userId"`
+	Status		OrderStatus					`json:"status"`
+	Items		[]*product.SimpleProduct	`json:"items"`
 }
 
 func New(id OrderId, userId user.UserId, items []*product.SimpleProduct) *Order {

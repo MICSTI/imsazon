@@ -63,9 +63,9 @@ func (s *service) Ship(orderId orderModel.OrderId) (error) {
 	}
 
 	// call the mail service to send out an email that the order was shipped successfully
-	mail := mail.New(s.testMailRecipient, "Your order has been shipped", successfulShippingMailBody, "text/html")
+	mailToSend := mail.New(s.testMailRecipient, "Your order has been shipped", successfulShippingMailBody, "text/html")
 
-	err = sendMail(mail)
+	err = sendMail(mailToSend)
 
 	return nil
 }
@@ -128,7 +128,7 @@ func setOrderStatus(id orderModel.OrderId, newStatus orderModel.OrderStatus) err
 	return nil
 }
 
-func sendMail(mail mail.Email) error {
+func sendMail(mail *mail.Email) error {
 	message := map[string]interface{}{
 		"to": mail.To,
 		"subject": mail.Subject,

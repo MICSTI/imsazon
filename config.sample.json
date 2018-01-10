@@ -6,6 +6,7 @@
     "host": "HOSTNAME",
     "port": 587,
     "username": "USERNAME",
-    "password": "PASSWORD"
+    "password": "PASSWORD",
+    "from": "\"DISPLAY_NAME\" <EMAIL_ADDRESS>"
   }
 }

@@ -14,7 +14,7 @@ var (
 	Lightsaber = &Product{
 		P0001,
 		"Lightsaber",
-		"The perfect lightsaber for an aspiring Jedi",
+		"The perfect lightsaber for every aspiring Jedi",
 		"Weapons",
 		"http://images.buystarwarstoys.com/products/9288/1-1/ahsoka-tano-toy-lightsaber.jpg",
 		999.99,

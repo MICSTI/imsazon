@@ -12,13 +12,13 @@ func (p ProductId) String() string {
 }
 
 type Product struct {
-	Id				ProductId
-	Name			string
-	Description		string
-	Category		string
-	ImageUrl		string
-	Price			float32
-	Quantity		int
+	Id				ProductId		`json:"id"`
+	Name			string			`json:"name"`
+	Description		string			`json:"description"`
+	Category		string			`json:"category"`
+	ImageUrl		string			`json:"imageUrl"`
+	Price			float32			`json:"price"`
+	Quantity		int				`json:"quantity"`
 }
 
 func New(id ProductId, name string, description string, category string, imageUrl string, price float32, quantity int) *Product {

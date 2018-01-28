@@ -36,7 +36,8 @@ type service struct {
 
 // create a custom JWT claims struct
 type CustomClaims struct {
-	Role string `json:"role"`
+	Role 					string	 	`json:"role"`
+	Name					string		`json:"name,omitempty"`
 	jwt.StandardClaims
 }
 
@@ -53,6 +54,7 @@ func (s *service) Login(username string, password string) (string, error) {
 	// create the claims
 	claims := CustomClaims{
 		u.Role.String(),
+		u.Name,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Issuer: "imsazon",

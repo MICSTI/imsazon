@@ -34,8 +34,8 @@ func New(id ProductId, name string, description string, category string, imageUr
 }
 
 type SimpleProduct struct {
-	Id				ProductId
-	Quantity		int
+	Id				ProductId		`json:"id"`
+	Quantity		int				`json:"quantity"`
 }
 
 func NewSimpleProduct(id ProductId, quantity int) *SimpleProduct {

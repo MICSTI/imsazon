@@ -45,7 +45,7 @@ func (s *service) Create(newOrder *orderModel.Order) (order *orderModel.Order, e
 
 	// add today's date to order
 	currentDate := time.Now().Local()
-	newOrder.Date = currentDate.Format("31.12.2017")
+	newOrder.Date = currentDate.Format("2017-01-02")
 
 	return s.orders.Create(newOrder)
 }

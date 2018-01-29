@@ -7,6 +7,7 @@ import (
 	"errors"
 	orderModel "github.com/MICSTI/imsazon/models/order"
 	"github.com/MICSTI/imsazon/models/user"
+	"sort"
 )
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
@@ -61,7 +62,14 @@ func (s *service) GetById(id orderModel.OrderId) (*orderModel.Order, error) {
 }
 
 func (s *service) GetAll() []*orderModel.Order {
-	return s.orders.FindAll()
+	o := s.orders.FindAll()
+
+	// sort orders by ID so always the same order will be returned
+	sort.Slice(o, func(i, j int) bool {
+		return o[i].Id < o[j].Id
+	})
+
+	return o
 }
 
 func (s *service) GetAllForUser(userId user.UserId) []*orderModel.Order {
@@ -69,7 +77,14 @@ func (s *service) GetAllForUser(userId user.UserId) []*orderModel.Order {
 		return nil
 	}
 
-	return s.orders.FindAllForUser(userId)
+	o := s.orders.FindAllForUser(userId)
+
+	// sort orders by ID so always the same order will be returned
+	sort.Slice(o, func(i, j int) bool {
+		return o[i].Id < o[j].Id
+	})
+
+	return o
 }
 
 // NewService returns an order service with necessary dependencies.

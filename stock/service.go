@@ -9,6 +9,7 @@ package stock
 import (
 	"errors"
 	productModel "github.com/MICSTI/imsazon/models/product"
+	"sort"
 )
 
 // ErrInvalidArgument is returned when on or more arguments are invalid
@@ -31,6 +32,11 @@ type service struct {
 
 func(s *service) GetItems() []*productModel.Product {
 	p := s.products.FindAll()
+
+	// sort products by ID so always the same order will be returned
+	sort.Slice(p, func(i, j int) bool {
+		return p[i].Id < p[j].Id
+	})
 
 	return p
 }

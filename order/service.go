@@ -8,6 +8,7 @@ import (
 	orderModel "github.com/MICSTI/imsazon/models/order"
 	"github.com/MICSTI/imsazon/models/user"
 	"sort"
+	"time"
 )
 
 // ErrInvalidArgument is returned when one or more arguments are invalid.
@@ -41,6 +42,10 @@ func (s *service) Create(newOrder *orderModel.Order) (order *orderModel.Order, e
 	}
 
 	newOrder.Id = orderModel.GetRandomOrderId()
+
+	// add today's date to order
+	currentDate := time.Now().Local()
+	newOrder.Date = currentDate.Format("31.12.2017")
 
 	return s.orders.Create(newOrder)
 }

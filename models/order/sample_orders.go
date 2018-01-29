@@ -27,6 +27,7 @@ var (
 				Quantity: 1,
 			},
 		},
+		Status: Shipped,
 	}
 	Order2 = &Order{
 		Id: O0002,
@@ -38,5 +39,6 @@ var (
 				Quantity: 1,
 			},
 		},
+		Status: Returned,
 	}
 )

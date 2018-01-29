@@ -15,6 +15,7 @@ var (
 var (
 	Order1 = &Order{
 		Id:	O0001,
+		Date: "18.01.2018",
 		UserId: user.U0001,
 		Items: []*product.SimpleProduct{
 			&product.SimpleProduct{
@@ -29,6 +30,7 @@ var (
 	}
 	Order2 = &Order{
 		Id: O0002,
+		Date: "21.01.2018",
 		UserId: user.U0003,
 		Items: []*product.SimpleProduct{
 			&product.SimpleProduct{

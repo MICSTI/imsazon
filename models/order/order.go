@@ -49,6 +49,7 @@ func (s OrderStatus) String() string {
 type Order struct {
 	Id			OrderId						`json:"id"`
 	UserId		user.UserId					`json:"userId"`
+	Date		string						`json:"date"`
 	Status		OrderStatus					`json:"status"`
 	Items		[]*product.SimpleProduct	`json:"items"`
 }
